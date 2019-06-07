@@ -1,0 +1,33 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Ingresos/Fuente: #{@source.name}/nuevo",
+    breadcrumbs: {
+      crumbs: [
+        { name: 'Fuentes', path: sources_path },
+        { name: "Ingresos: #{@source.name}", path: source_incomes_path(@source) }
+      ],
+      active_label: "Nuevo ingreso"
+    },
+    has_return: true,
+    return_path: source_incomes_path(@source, query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+              <div class="col-lg-12">
+                  <h5>
+                      Fuente: <b>"<%= @source.name %>"</b>
+                      <br/>
+                      Nuevo ingreso
+                  </h5>
+                  <br>
+              </div>
+          </div>
+          <hr/>
+
+          <%= render 'form', income: @income %>
+      </div>
+  </div>
+<% end -%>

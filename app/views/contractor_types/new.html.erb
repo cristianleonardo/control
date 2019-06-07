@@ -1,0 +1,23 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Tipos de contratista/nuevo',
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [ { name: 'Tipos de contratista', path: contractor_types_path } ],
+      active_label: "Nuevo"
+    },
+    has_return: true,
+    return_path: contractor_types_path
+  }
+) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nuevo tipo de contratista</h5>
+      <br>
+
+      <%= render 'form', contractor_type: @contractor_type %>
+    </div>
+  </div>
+<% end -%>

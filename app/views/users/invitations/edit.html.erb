@@ -1,0 +1,59 @@
+<%= content_for :title, "Restaurar Contraseña" %>
+
+<div class="container">
+  <div class='row'>
+    <div class='col-lg-offset-4 col-lg-4'>
+      <%= image_tag('/assets/images/logo.svg', size: '250x97', class: "center-image") %>
+
+      <h4>Activar y asignar mi contraseña</h4>
+      <h5><%= @user.firstname %> <%= @user.lastname %></h5>
+      <hr>
+      <small>Ingresa una nueva contrase&ntilde;a para tu cuenta</small>
+      <br><br>
+
+      <%= form_for @user, :url => invitation_path(params[:id]), html: { id:'invitation_edit_form', method: :put } do |f| %>
+
+        <%= f.hidden_field :reset_password_token %>
+
+        <div class="form-group">
+          <label>Contrase&ntilde;a nueva (min 8 caracteres)</label>
+          <span v-show="isValidField('password')" class='required-field'>*</span>
+          <%= f.password_field :password,
+            autofocus: true,
+            autocomplete: "off",
+            class: 'form-control',
+            "v-model"=>"password",
+            "v-validate"=>"'required|min:8'"
+          %>
+        </div>
+
+        <div class="form-group">
+          <label>Vuelve a escribir la contrase&ntilde;a</label>
+          <span v-show="isValidField('password_confirmation')" class='required-field'>*</span>
+          <%= f.password_field :password_confirmation,
+            autocomplete: "off",
+            class: 'form-control',
+            'v-model' => "password_confirmation",
+            "v-validate"=>"'required|min:8'"
+          %>
+        </div>
+
+        <!-- BEGIN INCOMPLETE WARNING -->
+        <div v-show="errors.any()" class="alert alert-warning" role="alert">
+          <p>
+            <%= fw_icon('warning') %>
+            Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+          </p>
+        </div>
+        <!-- END INCOMPLETE WARNING -->
+
+        <%= submit_tag "Enviar",
+          class: 'btn btn-primary',
+          "data-disable-with" => "Restableciendo...",
+          ":disabled" => "errors.any()"
+        %>
+      <% end %>
+
+    </div>
+  </div>
+</div>

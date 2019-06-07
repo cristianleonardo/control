@@ -1,0 +1,22 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Usuarios / editar: #{fullname(@user)}",
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [ { name: 'Usuarios', path: users_path } ],
+      active_label: "Editar usuario: \"#{fullname(@user)}\""
+    },
+    has_return: true,
+    return_path: users_path
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar usuario: "<%= fullname(@user) %>"</h5>
+      <hr>
+
+      <%= render 'form', user: @user %>
+    </div>
+  </div>
+<% end -%>

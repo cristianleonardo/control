@@ -1,0 +1,21 @@
+ <%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Contratos/nuevo',
+    breadcrumbs: {
+      crumbs: [ { name: 'Contrato', path: contracts_path } ],
+      active_label: 'Nuevo'
+    },
+    has_return: true,
+    return_path: contracts_path(query: @current_query, page: @current_page) 
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nuevo Contrato</h5>
+      <br>
+
+      <%= render 'form', contract: @contract %>
+    </div>
+  </div>
+<% end -%>

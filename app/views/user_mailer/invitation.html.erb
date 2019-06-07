@@ -1,0 +1,13 @@
+<h4>Hola <%= @user.firstname %></h4>
+
+<p>Invitaci&oacute;n a la plataforma de trabajo. Para activar su cuenta, haga clic en el enlace de abajo.</p>
+
+<%= link_to 'Activar mi cuenta', edit_invitation_url(@user.invitation_token) %>
+
+<br>
+
+<p>
+  Equipo
+  <br>
+  <b>(SAPSB) Secretar&iacute;a de Agua Potable y Saneamiento B&aacute;sico</b>
+</p>

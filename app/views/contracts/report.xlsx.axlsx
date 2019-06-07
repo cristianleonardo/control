@@ -1,0 +1,70 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+  center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+  date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  title = wb.styles.add_style(bg_color:  "CEF6E3",
+                              fg_color: "#FF000000",
+                              b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+
+  bold = wb.styles.add_style( b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+  bold_underline = wb.styles.add_style( b: true,
+                                        u: true,
+                                        alignment: {vertical: :center, horizontal: :left})
+  bold_left = wb.styles.add_style(
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :left})
+
+  bold_total = wb.styles.add_style( bg_color: "B4B4B4",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  bold_currency = wb.styles.add_style(
+                                    b: true,
+                                    format_code: '_$ * #,##0.00_;_[Red]$ * -#,##0.00',
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+  currency = wb.styles.add_style(format_code: '_$ * #,##0.00_;_[Red]$ * -#,##0.00', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  background_green = wb.styles.add_style( bg_color:  "66FA83",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+
+  background_red = wb.styles.add_style( bg_color:  "FA7366",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+
+  wb.add_worksheet(name: "Contratos") do |sheet|
+    contracts = contracts_report
+    header = ["Numero de proceso", "Objeto contractual", "Observaciones", "Fecha subscripcion", "Fecha de inicio", "Fecha de liquidacion", "Fecha de apertura", "Fecha de cierre", "Fecha de adjudicacion", "Modo", "Estado", "Tipo", "Ciudad", "Interventor", "Supervisor", "Contratista", "Termino de contrato", "Valor inicial", "Valor", "Total de adiciones"]
+    sheet.add_row header, style: head
+    styles = [bold] + [space] * 2 + [date] * 6 + [center_values] * 8 + [currency] * 3
+    widths = [:auto] + [106] * 2 + ([:auto] * (header.length - 6)) + [20] * 3
+    contracts.each do |contract|
+      sheet.add_row contract, style: styles, widths: widths
+    end
+  end
+end

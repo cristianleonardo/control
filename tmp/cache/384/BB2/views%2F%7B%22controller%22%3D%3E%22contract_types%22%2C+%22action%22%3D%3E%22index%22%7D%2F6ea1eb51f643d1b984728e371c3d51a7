@@ -1,0 +1,13 @@
+o: ActiveSupport::Cache::Entry:@valueI"¹      <div class="list-group">
+
+      <a class="list-group-item active" href="/a/tipos_de_contrato">
+        <i class="fa fa-handshake-o fa-lg fa-fw"></i> Tipos de contrato
+</a>
+      <a class="list-group-item " href="/a/tipos_de_contratistas">
+        <i class="fa fa-users fa-lg fa-fw"></i> Tipos de contratista
+</a>
+      <a class="list-group-item " href="/a/usuarios">
+        <i class="fa fa-user fa-lg fa-fw"></i> Usuarios
+</a></div>
+
+:ET:@created_atf1559882987.3884728:@expires_in0

@@ -1,0 +1,26 @@
+<%= content_for :title, browser_title unless local_assigns[:browser_title].nil? %>
+
+<%= render 'shared/a/breadcrumbs', :breadcrumbs => breadcrumbs, section: (local_assigns[:section].nil? ? 'main' : 'administration') %>
+
+<div class="row">
+  <div class="col-lg-3">
+    <% cache "#{params}" do %>
+      <%= render 'shared/a/menu', section: (local_assigns[:section].nil? ? 'main' : 'administration') %>
+    <% end %>    
+  </div>
+
+  <div class="col-lg-9">
+    <% has_return = nil if local_assigns[:has_return].nil? %>
+    <% return_path = '' if local_assigns[:return_path].nil? %>
+
+    <%= render(
+      layout: 'shared/a/panel',
+      :locals => {
+        has_return: has_return,
+        return_path: return_path
+      }
+    ) do %>
+      <%= yield %>
+    <% end %>
+  </div>
+</div>

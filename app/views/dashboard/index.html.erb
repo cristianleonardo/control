@@ -1,0 +1,30 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Indicadores',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Indicadores'
+    }
+  }
+) do %>
+  <div class="row">
+    <% if Payment.any? %>
+      <div class="col-lg-5">
+        <h5>Fuentes Externas</h5>
+        <canvas id="source_pie" width="50" height="50"></canvas>
+      </div>
+
+      <div class="col-lg-5">
+          <h5>Recursos Propios</h5>
+          <canvas id="source_pie2" width="50" height="50"></canvas>
+      </div>
+    <% else %>
+      <div class="col-lg-12">
+        <div class="alert alert-info" role="alert">
+          Los indicadores presentaran información cuando se inscriban pagos en el sistema.
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

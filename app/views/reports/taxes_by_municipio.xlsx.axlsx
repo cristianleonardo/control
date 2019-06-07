@@ -1,0 +1,95 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+  center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+  date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  title = wb.styles.add_style(bg_color:  "CEF6E3",
+                              fg_color: "#FF000000",
+                              b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+
+  bold = wb.styles.add_style( b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+  bold_underline = wb.styles.add_style( b: true,
+                                        u: true,
+                                        alignment: {vertical: :center, horizontal: :left})
+  bold_left = wb.styles.add_style(
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :left})
+
+  bold_total = wb.styles.add_style( bg_color: "B4B4B4",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  bold_currency = wb.styles.add_style(
+                                    b: true,
+                                    format_code: '_$ * #,##0.00_;_[Red]$ * -#,##0.00',
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+  currency = wb.styles.add_style(format_code: '_$ * #,##0.00_;_[Red]$ * -#,##0.00', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  background_green = wb.styles.add_style( bg_color:  "66FA83",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+
+  background_red = wb.styles.add_style( bg_color:  "FA7366",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+
+  @cities_name.each do |city|
+    wb.add_worksheet(name: "#{city[0].upcase}") do |sheet|
+      sheet.add_row ['','INFORMACION DE INVERSIÓN',''], style: head
+      sheet.add_row ['N° CDR', 'DESCRIPCION DEL PROYECTO MUNICIPIO DE ARBOLEDAS', 'VALOR DEL CONTRATO CON IVA'], style: head
+      report_for_municipios(city).each do |row|
+        sheet.add_row row, style: [center_values, space, currency]
+      end
+
+      sheet.add_row ['','','']
+      sheet.add_row ['',"APORTES DEL MUNICIPIO DE #{city[0].upcase} AL PDA PARA INVERSIÓN"]
+      sheet.add_row ['','','']
+      sheet.add_row ['','AÑO','VALOR'], style: [nil, bold, bold]
+      @value_contributions_table.each_with_index do |row, index|
+        style_year = @years.length == index || index == @value_contributions_table.length - 1 ? bold_left : space
+        style_currency = @years.length == index || index == @value_contributions_table.length - 1 ? bold_currency : currency
+        sheet.add_row row, style: [nil, style_year, style_currency]
+      end
+
+      sheet.add_row ['','','']
+      sheet.add_row ['','','']
+      sheet.add_row ['','RESUMEN FINANCIERO',''], style: [nil, bold_underline, nil]
+      sheet.add_row ['','','']
+      sheet.add_row ['','','']
+
+      @value_financial_table.each do |row|
+        sheet.add_row row, style: [nil, bold, bold_currency]
+      end
+
+      sheet.column_widths 23, 63, 30
+
+      sheet.add_chart(Axlsx::Pie3DChart, :start_at => [3 , @data + 2], :end_at => [1, @data + 12], :title => "REPRESENTACION GRAFICA RESUMEN FINANCIERO") do |chart|
+        chart.add_series :data => sheet["C#{@data}:C#{@data + 1}"], :labels => sheet["B#{@data}:B#{@data + 1}"], :colors => ['FF0000', '00FF00', '0000FF']
+      end
+    end
+  end
+end

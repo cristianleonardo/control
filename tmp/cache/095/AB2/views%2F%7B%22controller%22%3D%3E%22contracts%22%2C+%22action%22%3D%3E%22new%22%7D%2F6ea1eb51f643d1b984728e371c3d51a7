@@ -1,0 +1,23 @@
+o: ActiveSupport::Cache::Entry:@valueI"      <div class="list-group">
+    <a class="list-group-item " href="/a/tablero">
+      <i class="fa fa-line-chart fa-lg fa-fw"></i> Indicadores
+</a>
+
+    <a class="list-group-item " href="/a/planeacion_estrategica/1">
+      <i class="fa fa-table fa-lg fa-fw"></i> Planeación Estratégica
+</a>
+      <a class="list-group-item " href="/a/contratistas">
+        <i class="fa fa-users fa-lg fa-fw"></i> Contratistas
+</a>
+      <a class="list-group-item active" href="/a/contratos">
+        <i class="fa fa-handshake-o fa-lg fa-fw"></i> Contratos
+</a>
+      <a class="list-group-item " href="/a/pagos">
+        <i class="fa fa-money fa-lg fa-fw"></i> Pagos
+</a>
+    <a class="list-group-item " href="/a/reportes">
+      <i class="fa fa-bar-chart fa-lg fa-fw"></i> Reportes
+</a>
+</div>
+
+:ET:@created_atf1559884682.858395:@expires_in0

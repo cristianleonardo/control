@@ -1,0 +1,459 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Reportes'
+    }
+  }
+) do %>
+  <div class="row">
+    <div class="col-lg-12">
+        <h5>Reporte de Impuestos</h5>
+        <hr>
+        <%= form_tag withholdings_reports_path(format: "xlsx"), id: "withholdings_reports_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+  </div>
+        <% end %>
+        <hr/>
+  <div class="row">
+    <div class="col-lg-12">
+        <h5>Reporte Financiero</h5>
+        <hr>
+        <%= form_tag financial_reports_path(format: "xlsx"), id: "financial_reports_form", method: :get do %>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <div class="form-group">
+                <label for="namefield">Fecha de Inicio</label>
+                <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </span>
+                    <%= text_field_tag 'start_date', "",
+                    class: 'form-control datepicker input-sm',
+                        "v-validate"=>"'required'"
+                    %>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <label for="namefield">Fecha de fin</label>
+            <span v-show="isValidField('end_date')" class='required-field'>*</span>
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                            </span>
+                            <%= text_field_tag 'end_date',"",
+                            class: 'form-control datepicker input-sm',
+                                "v-validate"=>"'required'"
+                            %>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                        <% end %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+    <% end %>
+    <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte PDA</h5>
+        <hr>
+        <%= form_tag pda_reports_path(format: "xlsx"), id: "pda_reports_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte de Certificado sin Contrato</h5>
+        <hr>
+        <%= form_tag cdr_without_contract_reports_path(format: "xlsx"), id: "cdr_reports_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte por Saldo Disponible para Contratar</h5>
+        <hr>
+        <%= form_tag available_balance_contract_reports_path(format: "xlsx"), id: "available_balance_contract_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte por Subcomponente y Fuente</h5>
+        <hr>
+        <%= form_tag subcomponent_and_source_reports_path(format: "xlsx"), id: "subcomponent_and_source_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Diseño Reporte MOD</h5>
+        <hr>
+        <%= form_tag design_mod_reports_path(format: "xlsx"), id: "design_mod_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte de impuestos por municipio</h5>
+      <hr>
+        <%= form_tag taxes_by_municipio_reports_path(format: "xlsx"), id: "taxes_by_municipio_form", method: :get do %>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                  <label for="namefield">Fecha de Inicio</label>
+                  <span v-show="isValidField('start_date')" class='required-field'>*</span>
+                  <div class="input-group">
+                      <span class="input-group-addon">
+                          <i class="fa fa-calendar" aria-hidden="true"></i>
+                      </span>
+
+                      <%= text_field_tag 'start_date', "",
+                      class: 'form-control datepicker input-sm',
+                          "v-validate"=>"'required'"
+                      %>
+                  </div>
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Fecha de fin</label>
+                <span v-show="isValidField('end_date')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'end_date', "",
+                                class: 'form-control datepicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-lg-12">
+      <h5>Reporte FIA</h5>
+        <hr>
+        <%= form_tag fia_reports_path(format: "xlsx"), id: "fia_form", method: :get do %>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+                <label for="namefield">Año</label>
+                <span v-show="isValidField('year')" class='required-field'>*</span>
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-calendar" aria-hidden="true"></i>
+                                </span>
+                                <%= text_field_tag 'year', "",
+                                class: 'form-control yearpicker input-sm',
+                                    "v-validate"=>"'required'"
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <%= button_tag(class: 'btn btn-primary btn-sm', ':disabled'=>"(errors.count() >= 1) || fields.clean()", type: 'submit') do%>
+                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+  </div>
+  <hr>
+<% end %>

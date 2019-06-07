@@ -1,0 +1,305 @@
+o: ActiveSupport::Cache::Entry:@valueI"�.<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- BEGIN favicon -->
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png" />
+    <!-- END favicon -->
+
+    <title>
+      Contratos | SAPSB
+    </title>
+    <meta name="csrf-param" content="authenticity_token" />
+<meta name="csrf-token" content="qEfph/XE4FvUkxL/ZMa47HwFWSrXatCXZ77mGLMBUUmRK718N5THqPK86ImgaP/2OHbSh2Ro47YQu/KwkdpuVQ==" />
+    <link rel="stylesheet" media="all" href="/assets/stylesheets/application.css" />
+    <script src="https://use.fontawesome.com/81533e5f2e.js"></script>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+      <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class='active'>
+            <a href="/a/tablero">
+              <i class="fa fa-bullseye fa-lg fa-fw"></i> 
+</a>          </li>
+          <li class=''>
+            <a href="/a/tipos_de_contrato">
+              <i class="fa fa-cogs fa-lg fa-fw"></i> 
+</a>          </li>
+        </ul>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Control (Administration)<span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a rel="nofollow" data-method="delete" href="/sesion/salir">Cerrar sesión</a></li>
+              </ul>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+
+      
+
+    <div class="container">
+      <div class="row">
+  <div class="col-lg-12">
+  </div>
+</div>
+
+      
+
+<!-- BEGIN Breadcrumbs -->
+<div class="row">
+  <div class="col-lg-12">
+
+    <ol class="breadcrumb">
+      <li>
+          <a href="/a/tablero">
+            <i class="fa fa-bullseye fa-lg fa-fw"></i>
+</a>      </li>
+
+
+      <li class="active">Contratos</li>
+    </ol>
+  </div>
+</div>
+<!-- END Breadcrumbs -->
+
+
+<div class="row">
+  <div class="col-lg-3">
+      <div class="list-group">
+    <a class="list-group-item " href="/a/tablero">
+      <i class="fa fa-line-chart fa-lg fa-fw"></i> Indicadores
+</a>
+
+    <a class="list-group-item " href="/a/planeacion_estrategica/1">
+      <i class="fa fa-table fa-lg fa-fw"></i> Planeación Estratégica
+</a>
+      <a class="list-group-item " href="/a/contratistas">
+        <i class="fa fa-users fa-lg fa-fw"></i> Contratistas
+</a>
+      <a class="list-group-item active" href="/a/contratos">
+        <i class="fa fa-handshake-o fa-lg fa-fw"></i> Contratos
+</a>
+      <a class="list-group-item " href="/a/pagos">
+        <i class="fa fa-money fa-lg fa-fw"></i> Pagos
+</a>
+    <a class="list-group-item " href="/a/reportes">
+      <i class="fa fa-bar-chart fa-lg fa-fw"></i> Reportes
+</a>
+</div>
+
+  </div>
+
+  <div class="col-lg-9">
+
+    <div class="panel panel-default">
+  <div class="panel-body">
+    
+      
+  <div class="row">
+    <div class="col-xs-4 col-lg-5">
+        <a class="btn btn-primary" href="/a/contratos/nuevo">
+          <i class="fa fa-plus fa-lg fa-fw"></i> 
+</a>    </div>
+
+    <div class='col-lg-6'>
+      <form class="form-inline pull-right" autocomplete="off" action="/a/contracts/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="&#x2713;" />
+        <div class="input-group" >
+          <input type="text" name="keyword" id="keyword" class="form-control" placeholder="# Contrato, # Proceso..." />
+          <span class="input-group-btn">
+            <input type="submit" value="Buscar" class="btn btn-default" data-disable-with="Buscar" />
+            <a class="btn btn-default" data-target="#datepickerModal" data-toggle="modal" href="#">
+              <i class="fa fa-cogs" aria-hidden="true"></i>
+</a>          </span>
+        </div>
+</form>    </div>
+    <div class="col-lg-1">
+      <form id="contracts_report_form" action="/a/contratos/reporte.xlsx" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="&#x2713;" />
+        <div class="form-group">
+            <button name="button" type="submit" class="btn btn-primary btn-sm">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+</button>        </div>
+</form>    </div>
+  </div>
+  <div id="datepickerModal" class="modal fade" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+          <h4 class="modal-title">Filtro avanzado</h4>
+        </div>
+        <div class="modal-body">
+        <form autocomplete="off" action="/a/contracts/search" accept-charset="UTF-8" method="get"><input name="utf8" type="hidden" value="&#x2713;" />
+          <div class="row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Numero de contrato/proceso</label>
+                  <input type="text" name="keyword" id="keyword" class="form-control input-sm" placeholder="PDA, SAPSB..." />
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Certificado</label>
+                <select name="work_id" id="work_id" class="form-control select2"><option value="" label=" "></option></select>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Estado</label>
+                  <select name="state" id="state" class="form-control input-sm"><option value="" label=" "></option><option value="PC">En proceso contractual</option>
+<option value="EJ">En ejecución</option>
+<option value="SU">Suspendido</option>
+<option value="TR">Terminado</option>
+<option value="LI">Liquidado</option></select>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Contratista</label>
+                <select name="contractor_id" id="contractor_id" class="form-control select2"><option value="" label=" "></option></select>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Modo</label>
+                  <select name="mode" id="mode" class="form-control input-sm"><option value="" label=" "></option><option value="CD">Contratación Directa</option>
+<option value="MC">Mínima Cuantía</option>
+<option value="CM">Concurso de Méritoss</option>
+<option value="LP">Licitación Pública</option>
+<option value="SA">Selección Abreviada</option>
+<option value="SI">Subasta Inversa</option></select>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Supervisor</label>
+                <select name="supervisor_contractor_id" id="supervisor_contractor_id" class="form-control select2"><option value="" label=" "></option></select>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Tipo</label>
+                  <select name="contract_type_id" id="contract_type_id" class="form-control input-sm"><option value="" label=" "></option><option value="1">Costo global</option>
+<option value="2">Tiempo y materiales</option>
+<option value="3">Precios Unitarios</option>
+<option value="4">Precio Alzado</option>
+<option value="5">Administracion</option></select>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Interventor</label>
+                <select name="interventor_contractor_id" id="interventor_contractor_id" class="form-control select2"><option value="" label=" "></option></select>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class='row'>
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Desde</label>
+                  <input type="text" name="st_date" id="st_date" class="form-control datepicker input-sm" placeholder="1999/01/01" />
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Hasta</label>
+                <input type="text" name="ed_date" id="ed_date" class="form-control datepicker input-sm" placeholder="2019/06/07" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="submit" value="Buscar" class="btn btn-primary" data-disable-with="Buscar" />
+        </div>
+</form>      </div>
+    </div>
+  </div>
+
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+        Aun no se registran contratos, has clic en el bot&oacute;n <i class="fa fa-plus fa-lg fa-fw"></i>  para agregar el primero.
+    </div>
+
+
+  </div>
+</div>
+  </div>
+</div>
+
+    </div>
+
+    <footer class="navbar-default navbar-fixed-bottom hidden-xs">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9">
+        <p style="margin: 20px 0; font-size: 12px;">
+          2019 &copy; Sistema para el control de obras civiles.&nbsp;Todos los derechos reservados.
+        </p>
+      </div>
+
+      <div class="col-lg-3">
+        <p style="margin: 20px 0; text-align: right; font-size: 12px;">
+          <i class="fa fa-code fa-sm fa-fw" style="color: #3A3A3A;"></i> with <img src="/assets/images/footer-heart.svg" alt="Footer heart" width="11" height="11" /> by <a style="color: #3A3A3A;" href="https://twitter.com/Cristia47609669">ProgramLab</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="/assets/javascripts/application.js" media="all"></script>
+  </body>
+</html>
+:ET:@created_atf1559883687.0500674:@expires_in0

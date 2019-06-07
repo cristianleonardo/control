@@ -1,0 +1,190 @@
+# coding: utf-8
+wb = xlsx_package.workbook
+wb.styles do |style|
+
+    wb.add_worksheet(name: "REPORTE DE CONTRATOS POR FUENTE") do |sheet|
+
+      head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                    height: 25,
+                                    fg_color: "#FF000000",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {horizontal: :center})
+
+      center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {horizontal: :center})
+      date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {horizontal: :center})
+      title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                    fg_color: "#FF000000",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {horizontal: :center})
+
+      currency = wb.styles.add_style :num_fmt => 5, border: Axlsx::STYLE_THIN_BORDER
+
+
+      row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER)
+
+
+
+        sheet.add_row ['INFORME DE CONTRATOS POR FUENTE Y POR VIGENCIA',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' '] , style: head
+        sheet.add_row []
+        sheet.merge_cells('A1:O1')
+        sheet.add_row ["Nº CDR", "VALOR CDR","FUENTE","VIGENCIA", "NIT", "NOMBRE DEL CONTRATISTA", "Nº DEL CONTRATO", "OBJETO", "VALOR CONTRATADO", "ACTA DE INICIO", "PLAZO", "FECHA DE TERMINACION", "VALOR PAGADO", "% PAGADO", "SALDO POR PAGAR"], style: title
+
+        contracts_by_source.each do |c|
+        content_row = sheet.add_row [
+                c.attributes['certi_number'],
+                c.attributes['cvalue'],
+                c.attributes['sname'],
+                add_months(c),
+                c.document_number,
+                c.attributes['contractor_name'],
+                c.contract_number,
+                c.contractual_object,
+                c.initial_value,
+                c.attributes['date_from'],
+                c.term_months,
+                c.ending_date,
+                c.attributes['contract_pay'].nil? ? 0 : c.attributes['contract_pay'],
+                "#{c.attributes['contract_pay'].nil? ? 0 : c.attributes['contract_pay']/c.initial_value*100} %",
+                c.attributes['contract_pay'].nil? ? c.initial_value : c.initial_value - c.attributes['contract_pay']
+            ]
+        end
+        sheet.column_widths 20, 20, 20, 20, 20, 28, 20, 38, 20, 20, 18, 26, 20, 17, 20
+
+      sheet.col_style(0,center_values)
+      sheet.col_style(1,currency)
+      sheet.col_style(2,center_values)
+      sheet.col_style(3,date)
+      sheet.col_style(4,center_values)
+      sheet.col_style(5,center_values)
+      sheet.col_style(6,center_values)
+      sheet.col_style(7,center_values)
+      sheet.col_style(8,currency)
+      sheet.col_style(9,date)
+      sheet.col_style(10,center_values)
+      sheet.col_style(11,date)
+      sheet.col_style(12,currency)
+      sheet.col_style(13,center_values)
+      sheet.col_style(14,currency)
+
+      sheet.rows[0].cells[0].style = title
+      sheet.rows[0].cells[1].style = title
+      sheet.rows[2].cells[0].style = title
+      sheet.rows[2].cells[1].style = title
+      sheet.rows[2].cells[2].style = title
+      sheet.rows[2].cells[3].style = title
+      sheet.rows[2].cells[4].style = title
+      sheet.rows[2].cells[5].style = title
+      sheet.rows[2].cells[6].style = title
+      sheet.rows[2].cells[7].style = title
+      sheet.rows[2].cells[8].style = title
+      sheet.rows[2].cells[9].style = title
+      sheet.rows[2].cells[10].style = title
+      sheet.rows[2].cells[11].style = title
+      sheet.rows[2].cells[12].style = title
+      sheet.rows[2].cells[13].style = title
+      sheet.rows[2].cells[14].style = title
+    end
+
+  #Sheet 2
+  wb.add_worksheet(name: "SALDO POR CDR DISP PARA CONTRAT") do |sheet|
+
+      head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                    height: 25,
+                                    fg_color: "#FF000000",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {horizontal: :center})
+
+      center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {horizontal: :center})
+
+
+      title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                    fg_color: "#FF000000",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {horizontal: :center})
+
+
+      row = wb.styles.add_style( format_code: "$#,##0;[Red]$-#,##0",
+                                  border: Axlsx::STYLE_THIN_BORDER)
+
+      sheet.add_row ['SALDOS DISPONIBLES PARA CONTRATAR POR CDR Y POR FUENTE',] , style: head
+      sheet.merge_cells("A1:#{title_row_merge(sources_names)}1")
+
+      sheet.add_row second_row_title(sources_names), style: head
+
+      merge = second_row_merge(sources_names)
+      merge.each do |item_merge|
+        sheet.merge_cells(item_merge)
+      end
+      sheet.add_row names_columns(sources_names), style: title
+      sheet.column_widths 20
+
+      certificates.each do |certificate|
+        content_row = sheet.add_row balances_row_values(certificate, @sources_names), style: row
+      end
+
+      sheet.col_style(0,center_values)
+      sheet.rows[0].cells[0].style = title
+      sheet.rows[1].cells[0].style = title
+      sheet.rows[2].cells[0].style = title
+     end
+
+
+  #Sheet 3
+  wb.add_worksheet(name: "REPORTE DE PAGOS") do |sheet|
+      head = wb.styles.add_style(bg_color:  "CEF6E3",
+                  height: 25,
+                                  fg_color: "#FF000000",
+                                  b: true,
+                                  border: Axlsx::STYLE_THIN_BORDER,
+                                  alignment: {horizontal: :center})
+
+      center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {horizontal: :center})
+
+      title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                  fg_color: "#FF000000",
+                                  b: true,
+                                  border: Axlsx::STYLE_THIN_BORDER,
+                                  alignment: {horizontal: :center})
+      row = wb.styles.add_style( format_code: "$#,##0;[Red]$-#,##0",
+                                  border: Axlsx::STYLE_THIN_BORDER)
+
+      date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {horizontal: :center})
+      sum = wb.styles.add_style(format_code: "$#,##0;[Red]$-#,##0", family: 3,
+                              border: Axlsx::STYLE_THIN_BORDER, b:true
+                              )
+
+    sheet.add_row ['']
+    sheet.add_row ['REPORTE DE PAGOS POR MES ',] , style: head
+    sheet.merge_cells('A2:P2')
+
+    sheet.add_row ["NUMERO DE DOCUMENTO DISPONIBILIDAD CDR", "FUENTE", "VALOR CDR POR FUENTE", "NIT O # CEDULA  DEL CONTRATISTA", "NOMBRE DEL CONTRATISTA", "NUMERO DE CONTRATO", "VALOR DEL CONTRATO POR FUENTE", "DESCRIPCION DEL PAGO", "VALOR BRUTO", "ANTICIPOS", "valor bruto - anticipos", "VALOR TOTAL RETENCIONES (IMPUESTO)", "VALOR DESEMBOLSO NETO", "SALDO DEL CONTRATO P", "ORDEN DE PAGO", "FECHA DE PAGO", ], style: title
+    sum_limit = 3
+    payments_by_cdr.each do |payment|
+      content_row = sheet.add_row payment_data(payment), style: row
+      sum_limit = sum_limit + 1
+    end
+
+    sheet.add_row [ "TOTALES","","","","","","","","","","=SUM(K4:K#{sum_limit})","","=SUM(M4:M#{sum_limit})","=SUM(N4:N#{sum_limit})","",""], style: sum
+    sheet.merge_cells("A#{sum_limit+4}:J#{sum_limit+4}")
+    sheet.col_style(0,center_values)
+    sheet.col_style(3,center_values)
+    sheet.col_style(5,center_values)
+    sheet.col_style(14,center_values)
+    sheet.col_style(15, date)
+    sheet.rows[2].cells[0].style = title
+    sheet.rows[2].cells[1].style = title
+    sheet.rows[2].cells[3].style = title
+    sheet.rows[2].cells[5].style = title
+    sheet.rows[2].cells[15].style = title
+    sheet.rows[2].cells[14].style = title
+
+    end
+end
+

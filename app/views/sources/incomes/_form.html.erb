@@ -1,0 +1,185 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <%= form_for([@source, income], html: { id: 'source_income_form', 'v-cloak' => true,  novalidate: false, 'data-sub_component_id'=> income.sub_component_id, 'data-component_id' => income.component_id}) do |f| %>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                <label for="namefield">Código</label>
+                <span v-show="isValidField('code')" class='required-field'>*</span>
+                <%= f.text_field :code,
+                  class: 'form-control input-sm',
+                  "v-validate"=>"'required'"
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                <label for="namefield">Fecha de ingreso</label>
+                <span v-show="isValidField('income_date')" class='required-field'>*</span>
+                <%= f.text_field :income_date,
+                  class: 'form-control datepicker input-sm',
+                  "v-validate"=>"'required'",
+                  value: @income.income_date != nil ? f.object.income_date.strftime("%Y/%m/%d") : ''
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="form-group">
+                <label for="contract_term_months">Valor</label>
+                <span v-show="isValidField('income_value')" class='required-field'>*</span>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon2">$</span>
+                  <%= f.number_field :income_value, class: 'form-control input-sm', step: :any, "v-validate"=>"'required'" %>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <div class="form-group">
+                <label for="component_id">Componente</label>
+                <%= f.collection_select(
+                  :component_id,
+                  fetch_components_hash,
+                  :first,
+                  :last,
+                  { include_blank: false},
+                  { class: 'form-control input-sm', 
+                    "v-validate"=>"'required'",
+                    "v-model" => "component_id",
+                    "v-on:change" => "fetchSubComponents"
+                  }
+                ) %>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label for="sub_component_id">Sub componente</label>
+                <div>
+                  <select id="subcomponent-list" class='form-control input-sm' v-model="selected_subcomponent" data-fieldname = "selected_subcomponent">
+                    <option label="" ></option>
+                    <option v-for="subcomponent in subcomponents" :value="subcomponent.id"> {{subcomponent.code}} - {{ subcomponent.name }} </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+             <div>
+            <%= f.hidden_field :sub_component_id, {"v-model" => "selected_subcomponent"} %>
+            </div>
+          </div>
+
+
+          
+
+          <div class='row'>
+            <div class="col-sm-12 col-md-12 col-lg-12">
+              <div class="form-group">
+                <label for="namefield">Descripción</label>
+                <%= f.text_area :description,
+                  class: 'form-control input-sm',
+                  rows: 5
+                %>
+              </div>
+            </div>
+          </div>
+
+<!--           <div class="row">
+            <div class='col-lg-6'>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label for="contract_city_id">Acta de comité</label>
+                    <%#= f.collection_select(
+                      :committee_minute_id,
+                      CommitteeMinute.order(:title),
+                      :id,
+                      :title,
+                      { include_blank: true },
+                      { class: 'form-control select2 input-sm', "v-validate"=>"'required'" }
+                    ) %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+           <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-6">
+              <div class="field form-group">
+                <div class="checkbox-inline">
+                  <%= f.check_box :financial_return %>
+                  <%= f.label :financial_return, "¿Es rendimiento financiero?" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BEGIN INCOMPLETE WARNING -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div v-show="errors.any()" class="alert alert-warning" role="alert">
+            <p>
+              <i class="fa fa-warning"></i>
+              Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- END INCOMPLETE WARNING -->
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <hr>
+          <%= hidden_field_tag(:query, @current_query) %>
+          <%= hidden_field_tag(:page, @current_page) %>
+          <%= f.submit 'Registrar', class: 'btn btn-primary', ":disabled" => "false", "data-disable-with" => "Registrando..." %>
+          <%= link_to 'Cancelar', source_incomes_path(@source, query: @current_query, page: @current_page), class: 'btn btn-default' %>
+
+          <% unless income.new_record? %>
+            <%= link_to('#', class: 'danger-link pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+              <i class="fa fa-trash-o fa-lg fa-fw" aria-hidden="true"></i>
+            <% end -%>
+
+            <!-- BEGIN DESTROY PERSON MODAL -->
+            <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Eliminar ingreso</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <% if policy(income).destroy? %>
+                        Esta seguro de eliminar el registro con el nombre <b><%= income.code %></b>? <br> Tenga en cuenta que esta acción es permanente.
+                      <% else %>
+                        No tiene los permisos necesarios para eliminar un contrato. contacte al administrador del sistema.
+                      <% end %>
+                    </p>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                    <% if policy(income).destroy? %>
+                      <%= link_to "Eliminar", [@source, income, query: @current_query, page: @current_page], method: :delete, class: 'btn btn-danger' %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END DESTROY PERSON MODAL -->
+          <% end -%>
+        </div>
+      </div>
+    <% end -%>
+  </div>
+</div>

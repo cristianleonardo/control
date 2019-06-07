@@ -1,0 +1,58 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'planeacion_estrategica',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'planeacion_estrategica'
+    }
+  }
+) do %>
+  <div class="row">
+    <div class='col-lg-5'>
+      <h4>Planeamiento Estratégico</h4>
+    </div>
+    <%= form_tag strategic_planning_index_path, :method => 'get', autocomplete: :off do %>
+    <div class='col-lg-4' id='prueba'>
+      <div class='col-lg-12'  >
+        <div class="input-group">
+          <%= text_field_tag :query1, params[:query1], class: 'form-control datepicker input-sm', placeholder: Income.all.order(:income_date).first.income_date.strftime('%Y/%m/%d') %>
+          <span class="input-group-text" >Hasta:</span>
+          <%= text_field_tag :query2, params[:query2], class: 'form-control datepicker input-sm', placeholder: Date.today.strftime('%Y/%m/%d') %>
+        </div>
+      </div>
+    </div>
+    <div class='col-lg-3' >
+        <div class="btn-group">
+          <%= submit_tag "Buscar", :name => nil, class: 'btn btn-primary' %>
+          <% if params[:query1] || params[:query2] %>
+            <%= link_to 'Limpiar', strategic_planning_index_path(query1: nil, query2: nil), class: "btn btn-info" %>
+          <% end %>
+        </div>
+    </div>
+    <%end%>
+  </div>
+  <br>
+  <div id="tmp" data-comp="<%= @components.to_json %>" data-comp_trun="<%= truncate_components.to_json %>" data-comp_id="<%= @components_id.to_json %>">
+    <div role="tabpanel" id="nav-tabs">
+      <ul class="nav nav-tabs" >
+        <li role="presentation" :class="{active: selectedTab === component_id}" @click="selectedTab = component_id " data-toggle="tab" v-for="(component_id,index) in components_id">
+          <a class="nav-link active"  data-toggle="tab" :href="'#' + component_id" role="tab" data-toggle="tooltip" :title="component[index]" >
+            {{(index+1) + ". " + comp[index]}}
+          </a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <% @components_id.each_with_index do |component_id,index|%>
+        <div role="tabpanel" class="tab-pane active" :id="<%= component_id %>">
+          <div v-if="selectedTab === <%= component_id %>">
+            <% arr_sub_components(component_id) %>
+            <%= render 'table', sub_components_id: @sub_components_id, id: index %>
+            <%= render 'collapse', {component: component_id, num_item: index} %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end -%>

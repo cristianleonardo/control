@@ -1,0 +1,158 @@
+# coding: utf-8
+financial_report
+wb = xlsx_package.workbook
+wb.styles do |style|
+  head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+  title = wb.styles.add_style(bg_color:  "BFBFBF",
+                              fg_color: "#FF000000",
+                              b: true,
+                              family: 3,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+  first_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {horizontal: :center})
+
+  row = wb.styles.add_style(format_code: "_$ * #,##0.00_;[Red]_$ * -#,##0.00", family: 3,
+    border: Axlsx::STYLE_THIN_BORDER)
+  sum = wb.styles.add_style(format_code: "_$ * #,##0.00_;[Red]_$ * -#,##0.00", family: 3,
+                            border: Axlsx::STYLE_THIN_BORDER, b:true
+                            )
+
+  wb.add_worksheet(name: "Reporte Financiero") do |sheet|
+    sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "B3"
+          pane.state = :frozen_split
+          pane.y_split = 2
+          pane.x_split = 1
+          pane.active_pane = :bottom_right
+    end
+    title_page = "HISTORICO DE INGRESOS, RECURSOS COMPROMETIDOS Y EJECUTADOS DEL #{date_string(@start_date,@end_date)}"
+    sheet.add_row [title_page] + [''] * (@sources_names[:sheet_1].size + 1), style: head
+    letter = ("A".."Z").to_a
+    sheet.merge_cells("A1:#{letter[(@sources_names[:sheet_1].size)]}1")
+    sheet.add_row sources_names_to_columns(@sources_names[:sheet_1]), style: title
+    @income_years[:sheet_1].each_with_index do |income_year, index|
+      sheet.add_row sources_row_values(income_year, index + 1), style: row
+    end
+    sum_row = sheet.add_row sum_sources(@sources_names[:sheet_1], @years), style: sum
+    @incomes_return_year[:sheet_1].each_with_index do |income_year, index|
+      sheet.add_row returns_row_values(income_year, index + 1, @years), style: row
+    end
+    sum_return_row = sheet.add_row sum_returns(@sources_names[:sheet_1], @years), style: sum
+    total_incomes_row = sheet.add_row total_incomes(@sources_names[:sheet_1], @years), style: sum
+    second_title_row = ["(-)RECURSOS COMPROMETIDOS"]
+    @sources_names[:sheet_1].each do |source_name|
+      second_title_row.push("")
+    end
+    second_title_row.push("")
+    certificate_title_row = sheet.add_row second_title_row, style: title
+    @add_designate_years[:sheet_1].each_with_index do |add_designate_year, index|
+      @add_designate_row = sheet.add_row designates_row_values(add_designate_year, index + certificate_title_row.index ), style: row
+    end
+    sum_add_designates_row = sheet.add_row sum_designates(@sources_names[:sheet_1], @years, certificate_title_row.index, 'add'), style: sum
+    @subtract_designate_years[:sheet_1].each_with_index do |subtract_designate_year, index|
+      @subtract_designate_row = sheet.add_row designates_row_values(subtract_designate_year, index + sum_add_designates_row.index), style: row
+    end
+    sum_subtract_designates_row = sheet.add_row sum_designates(@sources_names[:sheet_1], @years, sum_add_designates_row.index, 'subtract'), style: sum
+    difference_designates_row = sheet.add_row difference_rows(@sources_names[:sheet_1], sum_add_designates_row.index-1, sum_subtract_designates_row.index, "(=)TOTAL RECURSOS COMPROMETIDOS CON LIBERACIONES" ), style: sum
+    available_resources_row = sheet.add_row difference_rows(@sources_names[:sheet_1], sum_return_row.index, difference_designates_row.index, "(=)TOTAL RECURSOS DISPONIBLES POR COMPROMETER" ), style: sum
+    third_title_row = ["(-)RECURSOS EJECUTADOS"]
+    @sources_names[:sheet_1].each do |source_name|
+      third_title_row.push("")
+    end
+    third_title_row.push("")
+    contract_title_row = sheet.add_row third_title_row, style: title
+    @fund_years[:sheet_1].each_with_index do |fund_year, index|
+      sheet.add_row funds_row_values(fund_year, index, contract_title_row.index), style: row
+    end
+    sum_funds_row = sheet.add_row sum_rows(@sources_names[:sheet_1], @years, contract_title_row.index, 'TOTAL EJECUTADO A LA FECHA'), style: sum
+    difference_contract_row = sheet.add_row difference_rows(@sources_names[:sheet_1], difference_designates_row.index - 1, sum_funds_row.index, "(=)TOTAL RECURSOS POR EJECUTAR" ), style: sum
+    sheet.column_widths *col_widths(@sources_names[:sheet_1])
+    fourth_title = sheet.add_row ["RECURSOS POR GIRAR"] + [""] * (@sources_names[:sheet_1].length + 1), style: title
+    @source_annual_budgets[:sheet_1].each_with_index do |annual_budget, index|
+      sheet.add_row source_annual_row_values(annual_budget, index, fourth_title.index), style: row
+    end
+    annual_budget = fourth_title.index + @source_annual_budgets[:sheet_1].length + 1
+    sheet.add_row sum_annual_budgets(@sources_names[:sheet_1], (fourth_title.index + 2), annual_budget), style: sum
+    sheet.column_widths 103, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36
+  end
+
+  wb.add_worksheet(name: "Reporte aux por Municipio") do |sheet|
+    title_row = ["Reporte Financiero Auxiliar por  Municipios (#{@start_date} al #{@end_date})",'','','','']
+    head_row = ["Municipio", "RECAUDADO   AL  #{@end_date}", "RENDIMIENTOS AL #{@end_date}", " CDR EXPEDIDOS AL #{@end_date}", "DISPONIBILIDAD AL #{@end_date}"]
+
+    sheet.add_row title_row, style: head
+    sheet.merge_cells("A1:E1")
+    sheet.add_row head_row, style: head
+
+    financial_sheet_2.each_with_index do |row_value, index|
+      sheet.add_row row_value, widths: [23.38, 21, 21, 21, 21]
+      sheet.row_style(index + 2, row)
+    end
+  end
+
+  wb.add_worksheet(name: "Reporte detallado por municipio") do |sheet|
+    sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "B3"
+          pane.state = :frozen_split
+          pane.y_split = 2
+          pane.x_split = 1
+          pane.active_pane = :bottom_right
+    end
+    title_page = "HISTORICO DE INGRESOS, RECURSOS COMPROMETIDOS Y EJECUTADOS DEL #{date_string(@start_date,@end_date)}"
+    sheet.add_row [title_page] + [''] * (@sources_names[:sheet_2].size + 1), style: head
+    letter = ("A".."Z").to_a
+    sheet.merge_cells("A1:#{letter[(@sources_names[:sheet_2].size)]}1")
+
+    sheet.add_row sources_names_to_columns(@sources_names[:sheet_2]), style: title
+    @income_years[:sheet_2].each_with_index do |income_year, index|
+      sheet.add_row sources_row_values(income_year, index), style: row
+    end
+    sum_row = sheet.add_row sum_sources(@sources_names[:sheet_2], @years), style: sum
+    @incomes_return_year[:sheet_2].each_with_index do |income_year, index|
+      sheet.add_row returns_row_values(income_year, index, @years), style: row
+    end
+    sum_return_row = sheet.add_row sum_returns(@sources_names[:sheet_2], @years), style: sum
+    total_incomes_row = sheet.add_row total_incomes(@sources_names[:sheet_2], @years), style: sum
+    second_title_row = ["(-)RECURSOS COMPROMETIDOS"]
+    @sources_names[:sheet_2].each do |source_name|
+      second_title_row.push("")
+    end
+    second_title_row.push("")
+    certificate_title_row = sheet.add_row second_title_row, style: title
+    @add_designate_years[:sheet_2].each_with_index do |add_designate_year, index|
+      @add_designate_row = sheet.add_row designates_row_values(add_designate_year, index + certificate_title_row.index ), style: row
+    end
+    sum_add_designates_row = sheet.add_row sum_designates(@sources_names[:sheet_2], @years, certificate_title_row.index, 'add'), style: sum
+    @subtract_designate_years[:sheet_2].each_with_index do |subtract_designate_year, index|
+      @subtract_designate_row = sheet.add_row designates_row_values(subtract_designate_year, index + sum_add_designates_row.index), style: row
+    end
+    sum_subtract_designates_row = sheet.add_row sum_designates(@sources_names[:sheet_2], @years, sum_add_designates_row.index, 'subtract'), style: sum
+    difference_designates_row = sheet.add_row difference_rows(@sources_names[:sheet_2], sum_add_designates_row.index - 1, sum_subtract_designates_row.index, "(=)TOTAL RECURSOS COMPROMETIDOS CON LIBERACIONES" ), style: sum
+    available_resources_row = sheet.add_row difference_rows(@sources_names[:sheet_2], sum_return_row.index, difference_designates_row.index, "(=)TOTAL RECURSOS DISPONIBLES POR COMPROMETER" ), style: sum
+    third_title_row = ["(-)RECURSOS EJECUTADOS"]
+    @sources_names[:sheet_2].each do |source_name|
+      third_title_row.push("")
+    end
+    third_title_row.push("")
+    contract_title_row = sheet.add_row third_title_row, style: title
+    @fund_years[:sheet_2].each_with_index do |fund_year, index|
+      sheet.add_row funds_row_values(fund_year, index, contract_title_row.index), style: row
+    end
+    sum_funds_row = sheet.add_row sum_rows(@sources_names[:sheet_2], @years, contract_title_row.index, 'TOTAL EJECUTADO A LA FECHA'), style: sum
+    difference_contract_row = sheet.add_row difference_rows(@sources_names[:sheet_2], difference_designates_row.index - 1, sum_funds_row.index, "(=)TOTAL RECURSOS POR EJECUTAR" ), style: sum
+    sheet.column_widths *col_widths(@sources_names[:sheet_2])
+    fourth_title = sheet.add_row ["RECURSOS POR GIRAR"] + [""] * (@sources_names[:sheet_2].length + 1), style: title
+    @source_annual_budgets[:sheet_2].each_with_index do |annual_budget, index|
+      sheet.add_row source_annual_row_values(annual_budget, index, fourth_title.index), style: row
+    end
+    annual_budget = fourth_title.index + @source_annual_budgets[:sheet_2].length + 1
+    sheet.add_row sum_annual_budgets(@sources_names[:sheet_2], (fourth_title.index + 2), annual_budget), style: sum
+    sheet.column_widths 103, 36, 36, 36, 36, 36, 36, 36, 36, 36, 36
+  end
+end

@@ -1,0 +1,78 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Usuarios',
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Usuarios'
+    }
+  }
+) do %>
+  <div class="row">
+    <div class="col-xs-4 col-lg-6">
+      <%= link_to(
+        new_user_path,
+        class: 'btn btn-primary'
+      ) do %>
+        <%= fw_icon('plus') %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <br>
+      <h5>Listado de usuarios registrados</h5>
+      <hr>
+    </div>
+  </div>
+
+  <% if @users.empty?  %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+        Aun no se registran usuarios, has clic en el botón <%= fw_icon('plus') %> para agregar el primero.
+    </div>
+  <% else  %>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="table-responsive">
+          <table class=" table table-condensed">
+            <thead>
+              <tr>
+                <th width='10%'></th>
+                <th width='10%'></th>
+                <th width='20%'>Nombre</th>
+                <th width='20%'>Email</th>
+                <th width='20%'>Grupo</th>
+              </tr>
+
+            </thead>
+            <tbody>
+              <% @users.each do |user| %>
+                <tr>
+                  <td>
+                    <%= link_to(edit_user_path(user), class: 'btn btn-default btn-xs') do %>
+                      <%= fw_icon('pencil', 'Editar', 'sm') %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% if user.disabled %>
+                      <span class="label label-default">Deshabilitado</span>
+                    <% else %>
+                      <span class="label label-success">Habilitado</span>
+                    <% end %>
+                  </td>
+                  <td><%= user.firstname %> <%= user.lastname %></td>
+                  <td><%= user.email %></td>
+                  <td><span class="label label-default"><%= user_group_name_in_spanish(user.role_group) %></span></td>
+                </tr>
+              <% end  %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end -%>
+<% end -%>

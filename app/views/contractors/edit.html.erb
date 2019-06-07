@@ -1,0 +1,21 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Contratistas/editar: #{@contractor.name}",
+    breadcrumbs: {
+      crumbs: [ { name: 'Contratistas', path: contractors_path } ],
+      active_label: "Editar: \"#{@contractor.name}\""
+    },
+    has_return: true,
+    return_path: contractors_path(query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar contratista: <%= @contractor.name %></h5>
+      <hr>
+
+      <%= render 'form', contractor: @contractor %>
+    </div>
+  </div>
+<% end -%>

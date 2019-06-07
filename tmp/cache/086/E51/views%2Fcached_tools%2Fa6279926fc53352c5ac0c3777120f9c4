@@ -1,0 +1,49 @@
+o: ActiveSupport::Cache::Entry:@valueI"�        <div id='tools-section' class='container'>
+    <div class='row'>
+      <div class='col-lg-12'>
+        <!-- BEGIN Impersonate section -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-default disabled">Development</button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user-circle-o fa-lg fa-fw"></i> Control (Administration)&nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                </li>
+                <li>
+                    <a rel="nofollow" data-method="post" href="/users/3/impersonate">
+                      <i class="fa fa-user-secret fa-lg fa-fw"></i> Control (Contratación)
+</a>                </li>
+                <li>
+                    <a rel="nofollow" data-method="post" href="/users/2/impersonate">
+                      <i class="fa fa-user-secret fa-lg fa-fw"></i> Control (Financianciero)
+</a>                </li>
+                <li>
+                    <a rel="nofollow" data-method="post" href="/users/5/impersonate">
+                      <i class="fa fa-user-secret fa-lg fa-fw"></i> Control (Reportes)
+</a>                </li>
+                <li>
+                    <a rel="nofollow" data-method="post" href="/users/4/impersonate">
+                      <i class="fa fa-user-secret fa-lg fa-fw"></i> Control (Supervisión)
+</a>                </li>
+            </ul>
+          </div>
+        <!-- END Impersonate section -->
+
+        <!-- TODO: Add Env section -->
+          <!-- BEGIN Environment section -->
+          <!-- <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              &nbsp;&nbsp;<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#"></a></li>
+              <li><a href="#"></a></li>
+            </ul>
+          </div> -->
+          <!-- END Environment section -->
+      </div>
+    </div>
+  </div>
+
+:ET:@created_atf1559886611.7400117:@expires_in0

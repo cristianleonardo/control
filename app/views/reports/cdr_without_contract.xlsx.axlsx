@@ -1,0 +1,72 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  wb.add_worksheet(name: "REPORTE POR VENCIMIENTO") do |sheet|
+    head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                  height: 25,
+                                  fg_color: "#FF000000",
+                                  b: true,
+                                  border: Axlsx::STYLE_THIN_BORDER,
+                                  alignment: {vertical: :center, horizontal: :center})
+
+    center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                        alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+    bold = wb.styles.add_style( b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+    currency = wb.styles.add_style(format_code: '_$ * #,##0_;$ * #,##0_;_$ * @', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER)
+
+    background_green = wb.styles.add_style( bg_color:  "66FA83",
+                                            height: 25,
+                                            fg_color: "#FF000000",
+                                            border: Axlsx::STYLE_THIN_BORDER,
+                                            alignment: {vertical: :center, horizontal: :center})
+
+    background_red = wb.styles.add_style( bg_color:  "FA7366",
+                                            height: 25,
+                                            fg_color: "#FF000000",
+                                            border: Axlsx::STYLE_THIN_BORDER,
+                                            alignment: {vertical: :center, horizontal: :center})
+
+    sheet.add_row ['CDRs SIN CONTRATOS DESTINADOS',' ',' ',' ',' ',' ',' '] , style: head
+    sheet.merge_cells('A1:G1')
+    sheet.add_row ["N° CDR","PROYECTO/CONCEPTO","FUENTES","VALOR","FECHA DE INICIO","FECHA DE VENCIMIENTO","STATUS"], style: title
+
+    cnt_row = 2
+    @certificates.each_with_index do |certificate, index|
+      designates = certificate[2]
+      certificate[2] = cdr_without_contract_sources(designates)
+      sheet.add_row certificate , widths: [25.63, 100, :auto,:auto,:auto,:auto,:auto]
+      if sheet.rows[cnt_row].cells[6].value == 'Vigente'
+        sheet.rows[cnt_row].cells[6].style = background_green
+      else
+        sheet.rows[cnt_row].cells[6].style = background_red
+      end
+      cnt_row += 1
+    end
+
+    sheet.col_style(0, bold)
+    sheet.col_style(1, space)
+    sheet.col_style(2, center_values)
+    sheet.col_style(3, currency)
+    sheet.col_style(4, date)
+    sheet.col_style(5, date)
+
+    sheet.row_style(0, head)
+    sheet.row_style(1, title)
+  end
+end

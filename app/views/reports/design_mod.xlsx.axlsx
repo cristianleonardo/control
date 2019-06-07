@@ -1,0 +1,192 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+  head_yellow = wb.styles.add_style(bg_color:  "FFF699",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+  head_blue = wb.styles.add_style(bg_color:  "99DBFF",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+  head_orange = wb.styles.add_style(bg_color:  "FFE099",
+                                height: 25,
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+  center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+  date = wb.styles.add_style(:format_code => "yyyy-mm-dd", border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  title = wb.styles.add_style(bg_color:  "CEF6E3",
+                              fg_color: "#FF000000",
+                              b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+
+  bold = wb.styles.add_style( b: true,
+                              border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center, horizontal: :center})
+  bold_component = wb.styles.add_style(
+                                    bg_color: "DBDBDB",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :left})
+
+  bold_total = wb.styles.add_style( bg_color: "B4B4B4",
+                                    b: true,
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  bold_currency = wb.styles.add_style( bg_color: "B4B4B4",
+                                    b: true,
+                                    format_code: '_$ * #,##0.00_;$ * -#,##0.00_;_$ * @',
+                                    border: Axlsx::STYLE_THIN_BORDER,
+                                    alignment: {vertical: :center, horizontal: :center})
+
+  space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                              alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+  currency = wb.styles.add_style(format_code: '_$ * #,##0.00_;$ * -#,##0.00_;_$ * @', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+  background_green = wb.styles.add_style( bg_color:  "66FA83",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+
+  background_red = wb.styles.add_style( bg_color:  "FA7366",
+                                          height: 25,
+                                          fg_color: "#FF000000",
+                                          border: Axlsx::STYLE_THIN_BORDER,
+                                          alignment: {vertical: :center, horizontal: :center})
+  top_border = wb.styles.add_style(border: { :style => :thick, :color => 'F000000', :name => :top, :edges => [:top] })
+
+  values_rows_certificates = design_mod_sheet_1_and_2
+
+  wb.add_worksheet(name: "reporte de certificados") do |sheet|
+    sheet.add_row ['FORMATO REPORTE DE CERTIFICADOS'] + [''] * 15 , style: head
+    sheet.merge_cells('A1:P1')
+
+    sheet.add_row ['Nº CERTIFICADO','CONCEPTO','FUENTES','VALOR DE C.D.R','DISPONIBILIDAD','ESTATUS','COMPONENTE','SUBCOMPONENTE','FECHA EXPD','FECHA VENC','','SALDO A LIBERAR','LIBERACION','FUENTE A LIBERAR','SALDO DE LIBERACION','FECHA LIB'], style: head
+
+    values_rows_certificates.each_with_index do |row, index|
+      sheet.add_row row, widths: [:auto] * 16
+      if sheet.rows[index + 2].cells[5].value == 'Vigente'
+        sheet.rows[index + 2].cells[5].style = background_green
+      else
+        sheet.rows[index + 2].cells[5].style = background_red
+      end
+    end
+
+    letters = ['A','B','F','G','H','I','J','M']
+    letters.each do |letter|
+      @merge_sheet_1.each_with_index do |cells|
+        sheet.merge_cells("#{letter}#{cells[0]}:#{letter}#{cells[1]}")
+      end
+    end
+
+    sheet.col_style(0, bold)
+    sheet.col_style(1..2, center_values)
+    sheet.col_style(3..4, currency)
+    sheet.col_style(6..7, center_values)
+    sheet.col_style(8..9, date)
+    sheet.col_style(10..13, center_values)
+    sheet.col_style(11, currency)
+    sheet.col_style(14, currency)
+    sheet.col_style(15, date)
+
+    sheet.row_style(0..1, head)
+    sheet.col_style(10, wb.styles.add_style(hash_styles(false, nil, [:left, :right])))
+
+  end
+
+  wb.add_worksheet(name: "reporte de contratos por CDR") do |sheet|
+    sheet.add_row ['CDR'] + [''] * 7 + ['CONTRATO'] + [''] * 20 + ['INFORMACIÓN ADICION AL CONTRATO'] + [''] * 7 , style: head
+    sheet.merge_cells('A1:H1')
+    sheet.merge_cells('I1:AB1')
+    sheet.merge_cells('AD1:AK1')
+
+    sheet.add_row ['Nº CERTIFICADO','CONCEPTO','FUENTES','VALOR DE C.D.R POR FUENTE','DISPONIBILIDAD DE C.D.R POR FUENTE','CDR Adici. A Contra.','COMPONENTE','SUBCOMPONENTE','Nº CONTRATO','MODALIDAD','TIPO','ESTADO','VALOR CONTRATO','VALOR PAGADO EN CONTRATO','SALDO LIBERADO DE CONTRATO','SALDO DISPONIBLE/LIBERAR CONTRATO','VALOR ADICION','VALOR REAL DE ADICION','SALDO A LIBERAR DE ADICION','SALDO DISPONIBLE/LIBERAR EN ADICION','NOMB. CONTRATISTA','INTERVENTOR','FECHA SUSCRIPCION CONTRATO','FECHA INICIO','FECHA DE ADICION','FECHA TERM','TERMINO','OBJETO DE CONTRATO','','Adición','Nº CDR de la Adición','Fecha','Tipo','Valor Adición','Valor Real de Adición','Saldo a Liberado de Adición','Saldo Disponible en Adicion'], style: head
+
+
+    @values_contract_column.each do |row|
+      sheet.add_row row, widths: [:auto, 40, 40] + [:auto] * 3 + [40] + [:auto] * 20 + [50] + [:auto] * 9
+    end
+
+    fmt_date = "yyyy-mm-dd"
+    fmt_currency = '_$ * #,##0.00_;$ * -#,##0.00_;_$ * @'
+    array_formats = [nil] * 3 + [fmt_currency] * 2 + [nil] * 7 + [fmt_currency] * 8 + [nil] * 2 + [fmt_date] * 4 + [nil] * 2 + [''] + [nil] * 2 + [fmt_date, nil] + [fmt_currency] * 4
+    sheet.col_style(0..36, wb.styles.add_style(hash_styles(false, nil, [])))
+    sheet.col_style(3..4, wb.styles.add_style(hash_styles(false, fmt_currency, [])))
+    sheet.col_style(12..19, wb.styles.add_style(hash_styles(false, fmt_currency, [])))
+    sheet.col_style(22..25, wb.styles.add_style(hash_styles(false, fmt_date, [])))
+    sheet.col_style(31, wb.styles.add_style(hash_styles(false, fmt_date, [])))
+    sheet.col_style(33..36, wb.styles.add_style(hash_styles(false, fmt_currency, [])))
+
+    styles_top = []
+    styles_bottom = []
+    array_formats.each_with_index do |fmt, index|
+      styles_top.push(wb.styles.add_style(hash_styles(false, fmt, [:top])))
+      styles_bottom.push(wb.styles.add_style(hash_styles(false, fmt, [:bottom])))
+    end
+
+    @merge_sheet_2.each_with_index do |cells|
+      sheet.merge_cells("A#{cells[0]}:A#{cells[1]}")
+      sheet.merge_cells("B#{cells[0]}:B#{cells[1]}")
+      sheet.merge_cells("G#{cells[0]}:G#{cells[1]}")
+      sheet.merge_cells("H#{cells[0]}:H#{cells[1]}")
+      sheet.rows[cells[0] - 1].style = styles_top
+      sheet.rows[cells[1] - 1].style = styles_bottom
+    end
+
+    sheet.col_style(0, wb.styles.add_style(hash_styles(true, nil, [:top, :bottom, :left])))
+    sheet.col_style(36, wb.styles.add_style(hash_styles(false, fmt_currency, [:top, :bottom, :right])))
+    sheet.rows[0].cells[0].style = head_yellow
+    sheet.rows[0].cells[8].style = head_orange
+    sheet.rows[0].cells[29].style = head_blue
+    sheet.row_style(1, head)
+    sheet.col_style(28,  wb.styles.add_style(hash_styles(false, nil, [:left, :right])))
+
+  end
+
+  design_mod_sheet_3_and_4(wb)
+
+  # Sheet 3 reporte de ordenes de pago
+
+  letters = ('A'..'F').to_a + ('I'..'R').to_a
+  letters.each do |letter|
+    @merge_values.each_with_index do |cells|
+      @array_values_sheet_3.merge_cells("#{letter}#{cells[0]}:#{letter}#{cells[1]}")
+    end
+  end
+  @array_values_sheet_3.col_style(0..17, style.add_style(hash_styles(false, nil, [:top, :bottom, :left, :right])))
+  @array_values_sheet_3.col_style(4, date)
+  @array_values_sheet_3.col_style(15..17, currency)
+  @array_values_sheet_3.row_style(0, head)
+
+  # Sheet 4 reporte de impuestos
+
+  letters = ('A'..'D').to_a + ('G'..'Y').to_a
+  letters.each do |letter|
+    @merge_values.each_with_index do |cells|
+      @array_values_sheet_4.merge_cells("#{letter}#{cells[0]}:#{letter}#{cells[1]}")
+    end
+  end
+  @array_values_sheet_4.col_style(0..24, style.add_style(hash_styles(false, nil, [:top, :bottom, :left, :right])))
+  @array_values_sheet_4.col_style(2, date)
+  @array_values_sheet_4.col_style(9..24, currency)
+  @array_values_sheet_4.rows[0].style = [head] * 9 + [head_blue] * 5 + [head_orange] * 10 + [head]
+end

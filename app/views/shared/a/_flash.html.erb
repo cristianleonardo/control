@@ -1,0 +1,10 @@
+<div class="row">
+  <div class="col-lg-12">
+    <% flash.each do |name, msg| %>
+      <div class="alert <%= (name == 'alert' ? 'alert-danger' : 'alert-success') %> alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <strong><%= fw_icon('bell') %></strong> <%= msg %>
+      </div>
+    <% end %>
+  </div>
+</div>

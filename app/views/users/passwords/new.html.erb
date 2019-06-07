@@ -1,0 +1,31 @@
+<%= content_for :title, "Restaurar Contraseña" %>
+
+<div class="container">
+  <div class='row'>
+    <div class='col-lg-offset-4 col-lg-4'>
+      <%= image_tag('/assets/images/logo.svg', size: '250x97', class: "center-image") %>
+
+      <h4>¿Olvidaste tu contraseña?</h4>
+      <hr>
+      <small>
+        Ingresa tu dirección de correo para restablecer tu contraseña.
+        <br>
+        Puede que tengas que ver en tu carpeta de spam o desbloquear
+        <br><b>no-responder@pdanortedesantander.com</b>
+      </small>
+      <br>
+      <br>
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { id: 'new_password_restore_form', method: :post, "v-cloak" => true }) do |f| %>
+        <div class="form-group">
+          <%= label :user, :email, 'Correo electrónico' %>
+          <%= f.email_field :email, autofocus: true, class: 'form-control', "v-model" => "email", "@keyup" => "checkIfEmailIsRegistrated" %>
+        </div>
+        <div class="alert alert-warning" role="alert" v-show="!hasEmailFormat && email !== ''">Ingrese un correo electrónico valido.</div>
+        <div class="alert alert-warning" role="alert" v-show="!isValid && hasEmailFormat">El correo electrónico no se encuentra registrado.</div>
+        <%= submit_tag "Enviar", class: 'btn btn-primary', ":disabled" => "!isValid" %>
+      <% end %>
+      <hr>
+      <%= render "users/shared/links" %>
+    </div>
+  </div>
+</div>

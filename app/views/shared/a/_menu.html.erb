@@ -1,0 +1,59 @@
+<div class="list-group">
+  <% if section == 'main' %>
+    <%= link_to(dashboard_path, class: "list-group-item #{is_indicator_path}") do %>
+      <%= fw_icon('line-chart', 'Indicadores') %>
+    <% end %>
+
+    <%# if policy(Source).index? %>
+      <%#= link_to(general_sources_path, class: "list-group-item #{is_general_sources_path}") do %>
+        <%#= fw_icon('briefcase', 'Presupuesto General') %>
+      <%# end %>
+    <%# end %>
+
+    <%= link_to(strategic_planning_path(id: 1), class: "list-group-item #{is_strategic_planning_path}") do %>
+      <%= fw_icon('table', 'Planeación Estratégica') %>
+    <% end %>
+
+    <% if policy(Contractor).index? %>
+      <%= link_to(contractors_path, class: "list-group-item #{is_contractor_path}") do %>
+        <%= fw_icon('users', 'Contratistas') %>
+      <% end %>
+    <% end %>
+
+    <% if policy(Contract).index? %>
+      <%= link_to(contracts_path(query1: nil, query2: nil, query3: nil), class: "list-group-item #{is_contracts_path}") do %>
+        <%= fw_icon('handshake-o', 'Contratos') %>
+      <% end %>
+    <% end %>
+
+    <% if policy(Payment).index? %>
+      <%= link_to(payments_path, class: "list-group-item #{is_payments_path}") do %>
+        <%= fw_icon('money', 'Pagos') %>
+      <% end %>
+    <% end %>
+
+    <%= link_to(reports_path, class: "list-group-item #{is_reports_path}") do %>
+      <%= fw_icon('bar-chart', 'Reportes') %>
+    <% end %>
+  <% end %>
+
+  <% if section == 'administration' %>
+    <% if policy(ContractType).index? %>
+      <%= link_to(contract_types_path, class: "list-group-item #{is_contract_types_path}") do %>
+        <%= fw_icon('handshake-o', 'Tipos de contrato') %>
+      <% end %>
+    <% end %>
+
+    <% if policy(ContractorType).index? %>
+      <%= link_to(contractor_types_path, class: "list-group-item #{is_contractor_types_path}") do %>
+        <%= fw_icon('users', 'Tipos de contratista') %>
+      <% end %>
+    <% end %>
+
+    <% if policy(User).index? %>
+      <%= link_to(users_path, class: "list-group-item #{is_users_path}") do %>
+        <%= fw_icon('user', 'Usuarios') %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
