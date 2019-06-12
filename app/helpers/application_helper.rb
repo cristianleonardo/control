@@ -58,9 +58,35 @@ module ApplicationHelper
     end
   end
 
+  def is_provider_path
+    case request.params[:controller]
+    when 'providers' then 'active'
+    end
+  end
+
+  def is_input_path
+    case request.params[:controller]
+    when 'inputs' then 'active'
+    end
+  end
+
   def is_contract_types_path
     case request.params[:controller]
     when 'contract_types' then 'active'
+    end
+  end
+
+  def is_work_types_path
+    case request.params[:controller]
+    when 'work_types' then 'active'
+    end
+  end
+
+  def is_work_path
+    case request.params[:controller]
+    when 'works' then 'active'
+    when 'inventories' then 'active'
+    when 'purchase_orders' then 'active'
     end
   end
 

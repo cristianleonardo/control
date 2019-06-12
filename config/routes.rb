@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
     get 'committee_minutes/:annual_budget_id', to: 'committee_minutes#fetch_minutes'
     get 'avaiability_letters/:committee_minute_id', to: 'avaiability_letters#fetch_letters'
-
+    get 'inputs/:provider_id', to: 'inputs#fetch_inputs'
     get 'contracts/:id', to: 'contracts#show'
     get 'committee_minutes/:id', to: 'committee_minutes#show'
     get 'avaiability_letters/:id', to: 'avaiability_letters#show'
@@ -72,12 +72,21 @@ Rails.application.routes.draw do
     resources :strategic_planning, :path => 'planeacion_estrategica', only: [:index,:show]
 
     resources :contractor_types, :path => 'tipos_de_contratistas', :path_names => { new: 'nuevo', edit: 'editar' }, except: [:show]
+    resources :work_types, :path => 'tipos_de_obra', :path_names => { new: 'nuevo', edit: 'editar' }, except: [:show]
     resources :components, :path => 'componentes', :path_names => { new: 'nuevo', edit: 'editar' }, except: [:show] do
       resources :sub_components, :path => 'sub_componentes', :path_names => { new: 'nuevo', edit: 'editar'}, except: [:show]
     end
 
     resources :general_parameters, :path => 'parametros_generales', :path_names => { new: 'nuevo', edit: 'editar' }
     resources :contractors, :path => 'contratistas', :path_names => { new: 'nuevo', edit: 'editar' }
+    resources :providers, :path => 'proveedores', :path_names => { new: 'nuevo', edit: 'editar' }
+    resources :inputs, :path => 'insumos', :path_names => { new: 'nuevo', edit: 'editar' }
+    resources :works, :path => 'obras', :path_names => { new: 'nuevo', edit: 'editar' } do
+      resources :inventories, :path => 'inventario', :path_names => {new: 'nuevo', edit: 'editar'}, except: [:show] do
+        resources :purchase_orders, :path => 'orden_de_compra', :path_names => {new: 'nuevo', edit: 'editar'}, except: [:show]
+      end
+      get 'invenroy/inputs', to: 'inventories#inputs'
+    end
 
     resources :certificates, :path => 'certificados', :path_names => { new: 'nuevo', edit: 'editar' } do
       resources :designates, :path => 'fuentes', :path_names => {new: 'nuevo', edit: 'editar'}, except: [:show]

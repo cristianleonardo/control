@@ -176,8 +176,6 @@
                 <th width='20%'>Contratista</th>
                 <th width='20%'>Valor</th>
                 <th width='5%'>Est</th>
-                <th width='5%'>%P</th>
-                <th width='25%'>T/A</th>
               </tr>
             </thead>
             <tbody>
@@ -213,12 +211,10 @@
                       </td>
                     <% end %>
                     <td><%= contract.process_number %></td>
-                    <td><%= contract.opening_date != nil ? contract.opening_date.strftime("%Y/%m/%d") : '' %></td>
+                    <td><%= contract.start_date != nil ? contract.start_date.strftime("%Y/%m/%d") : '' %></td>
                     <td><%= contract.contractor.try(:name) %></td>
-                    <td><%= number_to_currency(contract.cached_fetch_value) %></td>
+                    <td><%= number_to_currency(contract.value) %></td>
                     <td><%= contract.state %></td>
-                    <td><%= '%.2f' % contract_payment_percentage(contract) %>%</td>
-                    <td><%= number_to_currency(contract.cached_total_value) %></td>
                   </tr>
                 <% end %>
               <% end %>

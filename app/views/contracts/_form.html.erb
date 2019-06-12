@@ -50,24 +50,6 @@
             %>
           </div>
         </div>
-
-        <div class="col-lg-3">
-          <div class="form-group">
-            <label for="contract_contract_type_id">Tipo de Contrato</label>
-            <%=
-              f.collection_select(
-                :work_id,
-                Work.all,
-                :id,
-                :name,
-                {include_blank: true},
-                {
-                  class: 'form-control select2 input-sm'
-                }
-              )
-            %>
-          </div>
-        </div>
       </div>
 
       <div class="row">

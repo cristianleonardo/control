@@ -113,7 +113,7 @@ class ContractsController < ApplicationController
       :suscription_date,
       :start_date,
       :settlement_date,
-      :initial_value,
+      :value,
       :prepayment,
       :city_id,
       :mode,
@@ -126,7 +126,7 @@ class ContractsController < ApplicationController
       :contract_type_id,
       :process_number,
       :opening_date,
-      :ending_date,
+      :end_date,
       :award_date
      )
   end

@@ -54,7 +54,13 @@ require('./reports');
 require('./strategic_planning');
 require('./users');
 require('./users/password');
-require('./source_annual_bugets'); 
+require('./source_annual_bugets');
+require('./provider');
+require('./inputs');
+require('./work_types');
+require('./works');
+require('./inventories');
+require('./purchase_orders');
 
 // Datepicker
 $('.datepicker').datepicker({

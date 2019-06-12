@@ -1,0 +1,19 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Proveedores',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Proveedores'
+    }
+  }) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nuevo Proveedor</h5>
+      <br>
+
+      <%= render 'form', provider: @provider %>
+    </div>
+  </div>
+<% end -%>

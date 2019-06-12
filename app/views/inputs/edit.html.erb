@@ -1,0 +1,18 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Insumos',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Insumos'
+    }
+  }) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar insumo</h5>
+      <br>
+
+      <%= render 'form', input: @input %>
+    </div>
+  </div>
+<% end -%>

@@ -57,7 +57,12 @@
                   <div class="form-group">
                     <label>Numero de contrato</label>
                     <%= select_tag :contract_id, options_from_collection_for_select(Contract.all, :id, :contract_number, session[:payments_hash]["contract_id"]), include_blank: true, class: 'form-control select2' %>
-                  </div>
+                  </div>                      <%= link_to("#", class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'top',  'title'=>'Conciliar') do %>
+                        <%= fw_icon('code-fork', nil, 'xs') %>
+                      <% end %>
+                      <%= link_to("#", class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'top',  'title'=>'Retenciones') do %>
+                         <%= fw_icon('rotate-left', nil, 'xs') %>
+                      <% end %>
                 </div>
               </div>
             </div>
@@ -158,7 +163,6 @@
               <tr>
                 <th width='25%'></th>
                 <th width='10%'>O. Pago</th>
-                <th width='10%'>E</th>
                 <th width='13%'># Proceso</th>
                 <th width='10%'>Contratista</th>
                 <th width='13%'>Valor Base</th>
@@ -169,7 +173,6 @@
             </thead>
             <tbody>
               <% @payments.each do |payment| %>
-                <% cache ['recent', payment] do %>
                   <tr>
                     <td>
                       <%= link_to(edit_payment_path(payment, query: params[:query], page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Editar') do %>
@@ -179,25 +182,15 @@
                       <%#= link_to(expenditures_payment_path(payment, query: params[:query], page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'top',  'title'=>'Fondos') do %>
                         <%#= fw_icon('briefcase', nil, 'xs') %>
                       <%# end %>
-
-                      <%= link_to(conciliation_payment_path(payment, query: params[:query], page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'top',  'title'=>'Conciliar') do %>
-                        <%= fw_icon('code-fork', nil, 'xs') %>
-                      <% end %>
-
-                      <%= link_to(withholdings_payment_path(payment, query: params[:query], page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'top',  'title'=>'Retenciones') do %>
-                         <%= fw_icon('rotate-left', nil, 'xs') %>
-                      <% end %>
                     </td>
                     <td><%= payment.code %></td>
-                    <td><%= state_class(payment.state) %></td>
                     <td><%= payment.contract.process_number %></td>
                     <td><%= truncate(payment.contract.contractor.try(:name), length: 15) %></td>
                     <td><%= payment.vat ? number_to_currency(payment.base_value) : number_to_currency(payment.value) %></td>
                     <td><%= payment.vat ? number_to_currency(payment.vat_value) : '-' %></td>
-                    <td><%= payment.prepayment_appliance != nil ? number_to_currency(payment.value - payment.prepayment_appliance): number_to_currency(payment.value)%></td>
+                    <td><%= payment.prepayment_change != nil ? number_to_currency(payment.value - payment.prepayment_change): number_to_currency(payment.value)%></td>
                     <td><%= fw_icon(payment.prepayment ? 'check' : '') %></td>
                   </tr>
-                <% end %>
               <% end %>
             </tbody>
           </table>

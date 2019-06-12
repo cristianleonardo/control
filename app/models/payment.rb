@@ -2,9 +2,7 @@
 class Payment < ApplicationRecord
   belongs_to :contract
   belongs_to :subcontract
-  before_save :calculate_base_and_vat, :default_percentage
-
-  after_commit :cached_flush
+  before_save :calculate_base_and_vat
 
   def self.searchable_columns
     [:code]

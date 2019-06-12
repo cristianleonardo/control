@@ -1,0 +1,19 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Inventario',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Inventario'
+    }
+  }) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nuevo Inventario</h5>
+      <br>
+
+      <%= render 'form', inventory: @inventory %>
+    </div>
+  </div>
+<% end -%>

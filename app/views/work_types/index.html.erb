@@ -1,0 +1,65 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Tipos de obra',
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Tipos de obra'
+    }
+  }
+) do %>
+  <% if policy(WorkType).new? %>
+    <div class="row">
+      <div class="col-xs-4 col-lg-6">
+        <%= link_to(
+          new_work_type_path,
+          class: 'btn btn-primary'
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @work_types.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      Aun no se registran Tipos de obra, has clic en el botón <%= fw_icon('plus') %> para agregar el primero.
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de Tipos de obra registrados</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='15%'></th>
+                <th width='45%'>Nombre</th>
+                <th width='45%'>Descripcion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @work_types.each do |work_type| %>
+                <tr>
+                  <td>
+                    <%= link_to(edit_work_type_path(work_type), class: "btn btn-default btn-xs #{'disabled' unless policy(work_type).edit?}") do %>
+                      <%= fw_icon('pencil', 'Editar', 'xs') %>
+                      <% end %>
+                  </td>
+                  <td><%= work_type.name %></td>
+                  <td><%= work_type.description %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%#= paginate @work_types, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+<% end -%>

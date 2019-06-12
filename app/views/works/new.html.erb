@@ -1,0 +1,18 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Obras',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Obras'
+    }
+  }) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nueva Obra</h5>
+      <br>
+      <%= render 'form', work: @work %>
+    </div>
+  </div>
+<% end -%>

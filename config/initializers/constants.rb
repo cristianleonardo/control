@@ -89,3 +89,15 @@ DOCUMENT_SUB_TYPE = {
   "Nacional" => :NAC,
   "Regional" => :REG
 }
+
+INPUT_TYPES = {
+  "Material" => :MT,
+  "Equipo" => :EQ,
+  "Mano de obra" => :MO
+}
+
+INVENTORY_STATES = {
+  "Habilitado" => :HA,
+  "Deshabilitado" => :DH,
+  "Fuera de serivicio" => :FS
+}
