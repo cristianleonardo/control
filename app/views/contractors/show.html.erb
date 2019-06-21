@@ -1,0 +1,21 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    breadcrumbs: {
+      browser_title: 'Contratistas/Resumen',
+      crumbs: [ { name: 'Contratistas', path: contractors_path } ],
+      active_label: "Resumen del contratista: \"#{@contractor.name}\""
+    },
+    has_return: true,
+    return_path: contractors_path(query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Resumen del contratista: "<%= @contractor.name %>"</h5>
+      <br>
+
+      <div class="alert alert-info" role="alert">Vista en desarrollo...</div>
+    </div>
+  </div>
+<% end -%>

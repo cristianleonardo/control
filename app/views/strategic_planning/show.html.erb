@@ -1,0 +1,82 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'planeacion_estrategica',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'planeacion_estrategica'
+    }
+  }
+) do %>
+  <body onload="location.replace('<%= strategic_planning_index_path %>')">
+    <div id="tmp2">
+      <vue-content-loading :width="200" :height="124" :speed="2">
+        <!--title-->
+        <rect x="7" y="4"  width="60" height="6"></rect>
+        <!--buttons-->
+        <rect x="111" y="4"  width="15" height="6"></rect>
+        <rect x="127" y="4"  width="15" height="6"></rect>
+        <rect x="143" y="4"  width="15" height="6"></rect>
+        <rect x="163" y="4" rx="4" ry="4" width="19" height="6"></rect>
+        <!--tabs-->
+        <rect x="7" y="19"  width="30" height="7"></rect>
+        <rect x="38" y="19" width="30" height="7"></rect>
+        <rect x="69" y="19" width="30" height="7"></rect>
+        <rect x="100" y="19" width="30" height="7"></rect>
+        <!--table-->
+        <rect x="7" y="31"  width="20" height="5"></rect>
+        <rect x="7" y="39"  width="20" height="5"></rect>
+        <rect x="7" y="47"  width="20" height="5"></rect>
+        <rect x="7" y="55"  width="20" height="5"></rect>
+        <rect x="7" y="63"  width="20" height="5"></rect>
+        <rect x="7" y="71" width="20" height="5"></rect>
+
+        <rect x="33" y="31" width="20" height="5"></rect>
+        <rect x="33" y="39"  width="20" height="5"></rect>
+        <rect x="33" y="47"  width="20" height="5"></rect>
+        <rect x="33" y="55"  width="20" height="5"></rect>
+        <rect x="33" y="63"  width="20" height="5"></rect>
+        <rect x="33" y="71"  width="20" height="5"></rect>
+
+        <rect x="59" y="31"  width="20" height="5"></rect>
+        <rect x="59" y="39"  width="20" height="5"></rect>
+        <rect x="59" y="47"  width="20" height="5"></rect>
+        <rect x="59" y="55"  width="20" height="5"></rect>
+        <rect x="59" y="63"  width="20" height="5"></rect>
+        <rect x="59" y="71"  width="20" height="5"></rect>
+
+        <rect x="85" y="31"  width="20" height="5"></rect>
+        <rect x="85" y="39"  width="20" height="5"></rect>
+        <rect x="85" y="47"  width="20" height="5"></rect>
+        <rect x="85" y="55"  width="20" height="5"></rect>
+        <rect x="85" y="63"  width="20" height="5"></rect>
+        <rect x="85" y="71"  width="20" height="5"></rect>
+
+        <rect x="111" y="31"  width="20" height="5"></rect>
+        <rect x="111" y="39"  width="20" height="5"></rect>
+        <rect x="111" y="47"  width="20" height="5"></rect>
+        <rect x="111" y="55"  width="20" height="5"></rect>
+        <rect x="111" y="63"  width="20" height="5"></rect>
+        <rect x="111" y="71"  width="20" height="5"></rect>
+
+        <rect x="137" y="31"  width="20" height="5"></rect>
+        <rect x="137" y="39"  width="20" height="5"></rect>
+        <rect x="137" y="47"  width="20" height="5"></rect>
+        <rect x="137" y="55"  width="20" height="5"></rect>
+        <rect x="137" y="63"  width="20" height="5"></rect>
+        <rect x="137" y="71"  width="20" height="5"></rect>
+
+        <rect x="163" y="31"  width="20" height="5"></rect>
+        <rect x="163" y="39"  width="20" height="5"></rect>
+        <rect x="163" y="47"  width="20" height="5"></rect>
+        <rect x="163" y="55"  width="20" height="5"></rect>
+        <rect x="163" y="63"  width="20" height="5"></rect>
+        <rect x="163" y="71"  width="20" height="5"></rect>
+        <!--collapse elements-->
+        <rect x="7" y="83" width="50" height="7"></rect>
+        <rect x="7" y="93"  width="40" height="7"></rect>
+        <rect x="7" y="103"  width="60" height="7"></rect>
+      </vue-content-loading>
+    </div>
+  </body>
+<% end -%>

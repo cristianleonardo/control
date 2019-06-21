@@ -1,0 +1,18 @@
+<% if @sub_components.length > 1 %>
+  <% @sub_components.each_with_index do |sub_component,index|%>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" :data-target="'#'+ <%= @sub_components_id[index] %> + 'id'" aria-expanded="false" >
+            <%= "#{num_item + 1}.#{index + 1}. #{sub_component}" %>
+          </button>
+        </h5>
+      </div>
+      <div :id="<%= @sub_components_id[index] %> + 'id'" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div class="card-body">
+          <%= render 'table', sub_components_id: @sub_components_id[index], id: nil %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

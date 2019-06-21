@@ -1,0 +1,64 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Tipos de contratista',
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Tipos de contratistas'
+    }
+  }) do %>
+  <% if policy(ContractorType).new? %>
+    <div class="row">
+      <div class="col-xs-4 col-lg-6">
+        <%= link_to(
+          new_contractor_type_path,
+          class: 'btn btn-primary'
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @contractor_types.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      Aun no se registran tipos de contratistas, has clic en el botón <%= fw_icon('plus') %> para agregar el primero.
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de tipos de contratistas registrados</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='15%'></th>
+                <th width='45%'>Abreviatura</th>
+                <th width='45%'>Nombre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @contractor_types.each do |contractor_type| %>
+                <tr>
+                  <td>
+                    <%= link_to(edit_contractor_type_path(contractor_type), class: "btn btn-default btn-xs #{'disabled' unless policy(contractor_type).edit?}") do %>
+                      <%= fw_icon('pencil', 'Editar', 'xs') %>
+                      <% end %>
+                  </td>
+                  <td><%= contractor_type.abbreviation %></td>
+                  <td><%= contractor_type.name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%#= paginate @contractor_types, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+<% end -%>

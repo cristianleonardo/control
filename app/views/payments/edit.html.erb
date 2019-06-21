@@ -1,0 +1,24 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Pagos/editar: #{@payment.code}",
+    breadcrumbs: {
+      crumbs: [
+        { name: 'Pagos', path: payments_path }
+      ],
+      active_label: "Editar: #{@payment.code}"
+    },
+    has_return: true,
+    return_path: payments_path(query: @current_query, page: @current_page)
+  }
+) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar Pago</h5>
+      <hr>
+
+      <%= render 'form', payment: @payment %>
+    </div>
+  </div>
+<% end -%>

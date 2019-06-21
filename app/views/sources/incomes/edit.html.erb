@@ -1,0 +1,39 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Ingresos/Fuente: #{@source.name}/editar: #{@income.code}",
+    breadcrumbs: {
+      crumbs: [
+        { name: 'Fuentes', path: sources_path },
+        { name: "Ingresos: #{@source.name}", path: source_incomes_path(@source) }
+      ],
+      active_label: "Editar: \"#{@income.code}\""
+    },
+    has_return: true,
+    return_path: source_incomes_path(@source, query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="row">
+          <div class="col-lg-6">
+            <h5>
+              Fuente: <b>"<%= @source.name %>"</b> <br/>
+              Editar ingreso: "<%= @income.code %>"
+            </h5>
+          </div>
+          <div class="col-lg-6">
+            <dl class="dl-horizontal pull-right">
+                <dt>Fuente General</dt>
+                <dd><%=@source.name%></dd>
+                <dt>Disponible</dt>
+                <dd><%=number_to_currency(@source.available_value)%></dd>
+            </dl>
+          </div>
+        </div>
+        <hr/>
+
+      <%= render 'form', income: @income %>
+    </div>
+  </div>
+<% end -%>

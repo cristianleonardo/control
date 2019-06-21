@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-lg-12">
+    <br>
+    <h5><%= id ? @components[id] : '' %></h5>
+    <hr>
+    <div class="table-responsive" id="table_strategic_planning">
+      <table class="table table-condensed" style="font-size: 12px;">
+        <thead>
+          <tr>
+            <th>CONCEPTO</th>
+            <% @sources.each do |source| %>
+            <th><%= source %></th>
+            <% end %>
+            <th>TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% show_all(@sources,sub_components_id, params) %>
+          <tr>
+            <td>Comprometido</td>
+            <% @sources.each_with_index do |source, index| %>
+              <td><%= number_to_currency(@total_certificate[index]) %></td>
+            <% end %>
+            <td><%= number_to_currency(@total_certificate.inject(0, :+)) %></td>
+          </tr>
+          <tr>
+            <td>Contrato</td>
+            <% @sources.each_with_index do |source, index| %>
+              <td><%= number_to_currency(@total_contract[index]) %></td>
+            <% end %>
+            <td><%= number_to_currency(@total_contract.inject(0, :+))%></td>
+          </tr>
+          <tr>
+            <td>Pagado</td>
+            <% @sources.each_with_index do |source,index| %>
+              <td><%= number_to_currency(@total_payment[index]) %></td>
+            <% end %>
+            <td><%= number_to_currency(@total_payment.inject(0, :+)) %></td>
+          </tr>
+          <tr>
+            <td>Disponible</td>
+            <% @sources.each_with_index do |source,index| %>
+              <td><%= number_to_currency(@total_available[index])%></td>
+            <% end %>
+            <td><%= number_to_currency(@total_available.inject(0, :+)) %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,65 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Insumos',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Insumos'
+    }
+  }) do %>
+    <div class="row">
+      <div class="col-xs-4 col-lg-6">
+        <%= link_to(
+          new_input_path,
+          class: 'btn btn-primary'
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      </div>
+    </div>
+
+  <% if @inputs.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      Aun no se registran insumos, has clic en el botón <%= fw_icon('plus') %> para agregar el primero.
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de insumos registrados</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='15%'></th>
+                <th width='15%'>Abbreviacion</th>
+                <th width='15%'>Nombre</th>
+                <th width='15%'>Tipo</th>
+                <th width='20%'>Metrica</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @inputs.each do |input| %>
+                <tr>
+                  <td>
+                    <%= link_to(edit_input_path(input), class: "btn btn-default btn-xs") do %>
+                      <%= fw_icon('pencil', 'Editar', 'xs') %>
+                      <% end %>
+                  </td>
+                  <td><%= input.abbrevation %></td>
+                  <td><%= input.name %></td>
+                  <td><%= input.input_type %></td>
+                  <td><%= input.metrics %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%#= paginate @contractor_types, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+  <% end -%>

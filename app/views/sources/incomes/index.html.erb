@@ -1,0 +1,79 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Ingresos/Fuente: #{@source.name}",
+    breadcrumbs: {
+      crumbs: [ { name: 'Fuentes', path: sources_path } ],
+      active_label: "Ingresos: #{@source.name}"
+    },
+    has_return: true,
+    return_path: sources_path(query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+    <div class="col-xs-4 col-lg-6">
+      <%= link_to(
+        new_source_income_path(query: @current_query, page: @current_page),
+        class: 'btn btn-primary'
+      ) do %>
+        <%= fw_icon('plus') %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @incomes.empty?  %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+        Aun no se registran ingresos para esta fuente, has clic en el botón <%= fw_icon('plus') %> para agregar la primera.
+    </div>
+  <% else  %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>
+          Fuente: <b><%= @source.name %></b>
+          <br>
+          Listado de Ingresos
+        </h5>
+        <hr>
+        <div class="table-responsive">
+          <table class=" table table-condensed">
+            <thead>
+              <tr>
+                <th width='10%'></th>
+                <th width='20%'>Código</th>
+                <th width='20%'>Descripción</th>
+                <th width='20%'>Fecha</th>
+                <th width='20%'>Valor</th>
+                <th width='20%'>Sub Componente</th>
+                <th width='40%'>Rendmiento fianciero</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @incomes.each do |income|  %>
+                <tr>
+                  <td>
+                    <%= link_to(edit_source_income_path(@source, income, query: @current_query, page: @current_page), class: 'btn btn-default btn-xs') do %>
+                      <%= fw_icon('pencil', 'Editar', 'sm') %>
+                    <% end %>
+                  </td>
+                  <td><%= income.code %></td>
+                  <td><%= income.description.truncate(30) %></td>
+                  <td><%= strftimef(income.income_date)%></td>
+                  <td><%= number_to_currency(income.income_value) %></td>
+                  <td><%= name_sub_component(income.sub_component_id) %></td>
+                  <td><%= fw_icon(income.financial_return ? 'check' : '') %></td>
+                </tr>
+              <% end  %>
+              <tr class="active">
+                <td colspan="6"></td>
+                <td><b><%= number_to_currency(@incomes.sum(:income_value)) %></b></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  <% end %>
+<% end %>

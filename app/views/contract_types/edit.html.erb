@@ -1,0 +1,23 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Tipos de contrato/editar: #{@contract_type.abbreviation}",
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [ { name: 'Tipos de contrato', path: contract_types_path } ],
+      active_label: "Editar: #{@contract_type.abbreviation}"
+    },
+    has_return: true,
+    return_path: contract_types_path
+  }
+) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar tipo de contrato</h5>
+      <br>
+
+      <%= render 'form', contract_type: @contract_type %>
+    </div>
+  </div>
+<% end -%>

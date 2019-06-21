@@ -1,0 +1,22 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Fuentes/nuevo',
+    breadcrumbs: {
+      crumbs: [ { name: 'Fuentes', path: sources_path } ],
+      active_label: "Nueva"
+    },
+    has_return: true,
+    return_path: sources_path(query: @current_query, page: @current_page)
+  }
+) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nueva fuente</h5>
+      <br>
+
+      <%= render 'form', source: @source %>
+    </div>
+  </div>
+<% end -%>

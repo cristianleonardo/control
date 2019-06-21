@@ -1,0 +1,101 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  wb.add_worksheet(name: "REPORTE SUBCOMP Y FUENTE") do |sheet|
+    head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                  height: 25,
+                                  fg_color: "#FF000000",
+                                  b: true,
+                                  border: Axlsx::STYLE_THIN_BORDER,
+                                  alignment: {vertical: :center, horizontal: :center})
+
+    center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                        alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+    bold = wb.styles.add_style( b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+    bold_component = wb.styles.add_style(
+                                      bg_color: "DBDBDB",
+                                      b: true,
+                                      border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :left, wrap_text: true})
+
+    bold_total = wb.styles.add_style( bg_color: "B4B4B4",
+                                      b: true,
+                                      border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    bold_currency = wb.styles.add_style( bg_color: "B4B4B4",
+                                      b: true,
+                                      format_code: '_$ * #,##0_;$ * #,##0_;_$ * @',
+                                      border: Axlsx::STYLE_THIN_BORDER,
+                                      alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+    currency = wb.styles.add_style(format_code: '_$ * #,##0_;$ * #,##0_;_$ * @', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    sheet.add_row ["RECURSOS COMPROMETIDOS POR SUBCOMPONENTE DE LA VIGENCIA - #{date_string(@start_date, @end_date)}"] + [''] * 10 , style: head
+    sheet.merge_cells('A1:K1')
+
+    row_head = [' ','SUBCOMPONENTE'] << name_sources << "TOTAL CDR"
+    sheet.add_row row_head.flatten , style: head
+
+    rows_comp_and_sub = name_components_with_values
+
+    rows_comp_and_sub.each do |row|
+      sheet.add_row row, widths: [3.38,63, :auto, :auto, :auto, :auto, :auto, :auto, :auto, :auto, :auto,:auto]
+    end
+
+    sheet.merge_cells('B3:K3')
+    sheet.merge_cells('B8:K8')
+    sheet.merge_cells('B15:K15')
+    sheet.merge_cells('B18:K18')
+
+    sheet.add_row ["COSTO TOTAL COMPONENTES",""] + formula_total_sum("C".."K",@index_row_total_components), style: space
+    sheet.merge_cells('A21:B21')
+    sheet.merge_cells('A20:B20')
+    sheet.merge_cells('A17:B17')
+    sheet.merge_cells('A14:B14')
+    sheet.merge_cells('A7:B7')
+
+    sheet.col_style(0, bold)
+    sheet.col_style(1, space)
+    sheet.col_style(2..10, currency)
+
+    sheet.row_style(0, head)
+    sheet.row_style(1, head)
+
+    sheet.row_style(2,bold_component)
+    sheet.row_style(7,bold_component)
+    sheet.row_style(14,bold_component)
+    sheet.row_style(17,bold_component)
+
+    sheet.row_style(6,bold_currency)
+    sheet.row_style(13,bold_currency)
+    sheet.row_style(16,bold_currency)
+    sheet.row_style(19,bold_currency)
+    sheet.row_style(20,bold_currency)
+
+    sheet.rows[6].cells[0].style = bold_total
+    sheet.rows[6].cells[1].style = bold_total
+    sheet.rows[13].cells[0].style = bold_total
+    sheet.rows[13].cells[1].style = bold_total
+    sheet.rows[16].cells[0].style = bold_total
+    sheet.rows[16].cells[1].style = bold_total
+    sheet.rows[19].cells[0].style = bold_total
+    sheet.rows[19].cells[1].style = bold_total
+    sheet.rows[20].cells[0].style = bold_total
+    sheet.rows[20].cells[1].style = bold_total
+
+  end
+end

@@ -1,0 +1,12 @@
+<div class="panel panel-default">
+  <% unless local_assigns[:has_return].nil? %>
+    <div class="panel-heading">
+      <%= link_to(return_path, class: 'btn btn-default btn-sm') do %>
+        <i class="fa fa-chevron-left fa-sm fa-fw"></i> Volver
+      <% end %>
+    </div>
+  <% end %>
+  <div class="panel-body">
+    <%= yield %>
+  </div>
+</div>

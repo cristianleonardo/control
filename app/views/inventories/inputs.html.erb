@@ -1,0 +1,55 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Inventario',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Inventario'
+    }
+  }) do %>
+    <div class="row">
+      <div class="col-xs-4 col-lg-6">
+        <%= link_to(
+          new_work_inventory_purchase_order_path(inventory_id: @inventory.id, work_id: @work.id),
+          class: "btn btn-primary"
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      </div>
+    </div>
+
+  <% if @inputs.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      Aun no se registran insumos en este inventario, has clic en el botón <%= fw_icon('plus') %> para realizar una orden de compra.
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de insumos del inventario</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='45%'>Nombre</th>
+                <th width='45%'>Cantidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @inputs.each do |input| %>
+                <tr>
+                  <td><%= input.name %></td>
+                  <td><%= rand(1000..100000) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%#= paginate @workor_types, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+  <% end -%>

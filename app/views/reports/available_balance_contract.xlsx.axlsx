@@ -1,0 +1,70 @@
+wb = xlsx_package.workbook
+wb.styles do |style|
+  wb.add_worksheet(name: "SALDO DISPONIBLE PARA CONTRATAR") do |sheet|
+    head = wb.styles.add_style(bg_color:  "CEF6E3",
+                                  height: 25,
+                                  fg_color: "#FF000000",
+                                  b: true,
+                                  border: Axlsx::STYLE_THIN_BORDER,
+                                  alignment: {vertical: :center, horizontal: :center})
+
+    center_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                        alignment: {vertical: :center, horizontal: :center, wrap_text: true})
+
+    date = wb.styles.add_style(:format_code => "yyyy-mm-dd", :border => Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    title = wb.styles.add_style(bg_color:  "CEF6E3",
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+    bold = wb.styles.add_style( b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center, horizontal: :center})
+
+    space = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {vertical: :center,horizontal: :left, wrap_text: true})
+
+    currency = wb.styles.add_style(format_code: '_$ * #,##0_;$ * #,##0_;_$ * @', border: Axlsx::STYLE_THIN_BORDER, alignment: {vertical: :center, horizontal: :center})
+
+    row = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER)
+
+    background_green = wb.styles.add_style( bg_color:  "66FA83",
+                                            height: 25,
+                                            fg_color: "#FF000000",
+                                            border: Axlsx::STYLE_THIN_BORDER,
+                                            alignment: {vertical: :center, horizontal: :center})
+
+    background_red = wb.styles.add_style( bg_color:  "FA7366",
+                                            height: 25,
+                                            fg_color: "#FF000000",
+                                            border: Axlsx::STYLE_THIN_BORDER,
+                                            alignment: {vertical: :center, horizontal: :center})
+
+    sheet.add_row ["SALDO DISPONIBLE PARA CONTRATAR - #{date_string(@start_date, @end_date)}"] + [''] * 20 , style: head
+
+    sheet.add_row ['INFORMACION DEL CDR',' ',' ',' ',' ','VALOR CDR',' ',' ',' ',' ',' ',' ',' ','SALDO DISPONIBLE DEL CDR',' ',' ',' ',' ',' ',' ',' '] , style: head
+    sheet.merge_cells('A1:U1')
+    sheet.merge_cells('A2:E2')
+    sheet.merge_cells('F2:M2')
+    sheet.merge_cells('N2:U2')
+    sheet.add_row ["CDR N°","FECHA DE VENCIMIENTO","SUBCOMPONENTE","DESCRIPCION DEL PROYECTO","# ACTA","NACION ESTR.","REGALIAS","FONDO COMPENSACIÓN REGIONAL","OTROS RECURSOS","NACION","SGP DPTO","BANCO MUNDIAL","SGP MCPIO","SALDO DISP. DE NACION ESTR.","SALDO DISP. DE REGALIAS","SALDO DISP. DE FONDO COMPENSACIÓN REGIONAL","SALDO DISP. DE OTROS RECURSOS","SALDO DISP. DE NACION","SALDO DISP. DE SGP DPTO","SALDO DISP. DE BANCO MUNDIAL","SALDO DISP. DE SGP MCPIO"], style: head
+
+    certificates.each_with_index do |certificate, index|
+      values = value_source(designates[index])
+      sheet.add_row certificate.push(values).flatten!, widths: [:auto, :auto, :auto,:auto,:auto,:auto,:auto]
+    end
+
+    sheet.col_style(0, bold)
+    sheet.col_style(1, date)
+    sheet.col_style(2, space)
+    sheet.col_style(3, space)
+    sheet.col_style(4, center_values)
+    sheet.col_style(5..21, currency)
+
+    sheet.row_style(0, head)
+    sheet.row_style(1, head)
+    sheet.row_style(2, head)
+  end
+end

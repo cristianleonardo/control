@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [[ $CIRCLE_BRANCH =~ .*/epic-* ]]
+then
+  OIFS="$IFS"
+  IFS='/'
+  read -a split_branch <<< "${CIRCLE_BRANCH}"
+  IFS="$OIFS"
+  PR_TARGET_BRANCH=${split_branch[1]}
+else
+  PR_TARGET_BRANCH='master'
+fi
+
+if [ -n "$CI_PULL_REQUEST" ]; then
+  cipr=$CI_PULL_REQUEST
+  ciprlen=${#CI_PULL_REQUEST}
+  export PULL_REQUEST_ID=${cipr:42:ciprlen}
+
+  if [ "master" != "$CIRCLE_BRANCH" ]; then
+    eval "git fetch origin ${PR_TARGET_BRANCH}:refs/remotes/origin/${PR_TARGET_BRANCH}"
+    eval "pronto run -f github_pr -c origin/${PR_TARGET_BRANCH}"
+  fi
+fi

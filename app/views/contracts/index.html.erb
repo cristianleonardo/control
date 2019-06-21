@@ -1,0 +1,228 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Contratos',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Contratos'
+    }
+  }
+) do %>
+  <div class="row">
+    <div class="col-xs-4 col-lg-5">
+      <% if policy(Contract).new? %>
+        <%= link_to(
+          new_contract_path(query: params[:query]),
+          class: 'btn btn-primary'
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class='col-lg-6'>
+      <%= form_tag contracts_search_path, :method => 'get', class: 'form-inline pull-right', autocomplete: :off do %>
+        <div class="input-group" >
+          <%= text_field_tag :keyword, (params[:keyword] || session[:contracts_hash]["keyword"]), class: 'form-control', placeholder: "# Contrato, # Proceso..." %>
+          <span class="input-group-btn">
+            <%= submit_tag "Buscar", :name => nil, class: 'btn btn-default' %>
+            <%= link_to('#', class: session[:contracts_hash].any? ? 'btn btn-primary' : 'btn btn-default', "data-target" => "#datepickerModal", "data-toggle" => "modal") do %>
+              <i class="fa fa-cogs" aria-hidden="true"></i>
+            <% end -%>
+            <% if session[:contracts_hash].any?%>
+              <%= link_to 'Limpiar', contracts_clean_path , class: "btn btn-info" %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-lg-1">
+      <%= form_tag report_contracts_path(format: "xlsx"), id: "contracts_report_form", method: :get do %>
+        <div class="form-group">
+            <%= button_tag(class: 'btn btn-primary btn-sm', type: 'submit') do%>
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+            <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div id="datepickerModal" class="modal fade" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+          <h4 class="modal-title">Filtro avanzado</h4>
+        </div>
+        <div class="modal-body">
+        <%= form_tag contracts_search_path, :method => 'get', autocomplete: :off do %>
+          <div class="row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Numero de contrato/proceso</label>
+                  <%= text_field_tag :keyword,(params[:keyword] || session[:contracts_hash]["keyword"]), class: 'form-control input-sm', placeholder: "PDA, SAPSB..." %>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="form-group">
+                <label>Certificado</label>
+                <%= select_tag :work_id, options_from_collection_for_select(Work.all.order(:number), "id", "number", session[:contracts_hash]["work_id"]), include_blank: true, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Estado</label>
+                  <%= select_tag :state, options_from_collection_for_select(CONTRACT_STATES, :last, :first, session[:contracts_hash]["state"]), include_blank: true, class: 'form-control input-sm' %>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Contratista</label>
+                <%= select_tag :contractor_id, options_from_collection_for_select(Contractor.all, "id", "name", session[:contracts_hash]["contractor_id"]), include_blank: true, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Modo</label>
+                  <%= select_tag :mode, options_from_collection_for_select(CONTRACT_MODE, :last, :first, session[:contracts_hash]["mode"]), include_blank: true, class: 'form-control input-sm' %>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Supervisor</label>
+                <%= select_tag :supervisor_contractor_id, options_from_collection_for_select(Contractor.all, "id", "name", session[:contracts_hash]["supervisor_contractor_id"]), include_blank: true, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+          <div class= "row">
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Tipo</label>
+                  <%= select_tag :contract_type_id, options_from_collection_for_select(ContractType.all, "id", "name", session[:contracts_hash]["contract_type_id"]), include_blank: true, class: 'form-control input-sm'  %>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Interventor</label>
+                <%= select_tag :interventor_contractor_id, options_from_collection_for_select(Contractor.all, "id", "name", session[:contracts_hash]["interventor_contractor_id"]), include_blank: true, class: 'form-control select2' %>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class='row'>
+            <div class='col-lg-6'>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label>Desde</label>
+                  <%= text_field_tag :st_date, (params[:keyword] || session[:contracts_hash]["st_date"]), class: 'form-control datepicker input-sm', placeholder: "1999/01/01" %>
+                </div>
+              </div>
+            </div>
+            <div class='col-lg-6'>
+              <div class="form-group">
+                <label>Hasta</label>
+                <%= text_field_tag :ed_date, (params[:keyword] || session[:contracts_hash]["ed_date"]), class: 'form-control datepicker input-sm', placeholder: "#{Date.today.strftime('%Y/%m/%d')}" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <%= submit_tag "Buscar", :name => nil, class: 'btn btn-primary' %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if @contracts.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      <% if session[:contracts_hash].any? %>
+        No se encontraron contratos relacionados con el criterio. Intente de nuevo.
+      <% else %>
+        Aun no se registran contratos, has clic en el bot&oacute;n <%= fw_icon('plus') %> para agregar el primero.
+      <% end %>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de contratos registrados</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='3%'></th>
+                <% if policy(Contract).new? %>
+                  <th width='3%'></th>
+                  <th width='3%'></th>
+                  <th width='3%'></th>
+                <% end %>
+                <th width='25%'># Proceso</th>
+                <th width='25%'>F. Apertura</th>
+                <th width='20%'>Contratista</th>
+                <th width='20%'>Valor</th>
+                <th width='5%'>Est</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @contracts.each do |contract| %>
+                <% cache ["recent", contract] do %>
+                  <tr>
+                    <% if policy(Contract).new? %>
+                      <td>
+                        <%= link_to(edit_contract_path(contract, page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Editar') do %>
+                          <%= fw_icon('pencil', '', 'xs') %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= link_to(contract_additions_path(contract, page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Adiciones') do %>
+                          <%= fw_icon('plus-square-o', '', 'xs') %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= link_to(contract_budgets_path(contract, page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Presupuesto') do %>
+                          <%= fw_icon('briefcase', '', 'xs') %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= link_to(new_payment_path(contract_id: contract.id), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Nuevo Pago') do %>
+                          <%= fw_icon('money', '', 'xs') %>
+                        <% end %>
+                      </td>
+                    <% else %>
+                      <td>
+                        <%= link_to(contract_path(contract, page: params[:page]), class: 'btn btn-default btn-xs', 'data-toggle'=> 'tooltip', 'data-placement' => 'bottom',  'title'=>'Resumen') do %>
+                          <%= fw_icon('paperclip', '', 'xs') %>
+                        <% end %>
+                      </td>
+                    <% end %>
+                    <td><%= contract.process_number %></td>
+                    <td><%= contract.start_date != nil ? contract.start_date.strftime("%Y/%m/%d") : '' %></td>
+                    <td><%= contract.contractor.try(:name) %></td>
+                    <td><%= number_to_currency(contract.value) %></td>
+                    <td><%= contract.state %></td>
+                  </tr>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%= paginate @contracts, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+<% end -%>

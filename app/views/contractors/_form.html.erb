@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <%= form_for(contractor, html: { id: 'contractor_form', 'v-cloak' => true,  novalidate: false, 'data-contractortype' => contractor.contractor_type_id, 'data-name' => contractor.legal_representant_name, 'data-type' => contractor.legal_representant_document_type, 'data-number' => contractor.legal_representant_document_number, 'data-Cname' => contractor.name, 'data-Ctype' => contractor.document_type, 'data-Cnumber' => contractor.document_number}) do |f| %>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+
+          <div class='row'>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                <label for="namefield">Tipo de Contratista</label>
+                <span v-show="isValidField('contractor_type_id')" class='required-field'>*</span>
+                <%=
+                  f.collection_select(
+                    :contractor_type_id,
+                    ContractorType.all,
+                    :id,
+                    :name,
+                    { include_blank: true },
+                    {
+                      class: 'form-control input-sm',
+                      "v-validate"=>"'required'",
+                       "v-model" => "contractor_type_id"
+                    }
+                  )
+                %>
+              </div>
+            </div>
+          </div>
+
+          <div class='row'>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+                <label for="namefield">Tipo de documento</label>
+                <span v-show="isValidField('document_type')" class='required-field'>*</span>
+                <%=
+                  f.collection_select(
+                    :document_type,
+                    IDENTIFICATION_TYPES,
+                    :last,
+                    :first,
+                    { include_blank: true },
+                    {
+                      class: 'form-control input-sm',
+                      "v-validate"=>"'required'"
+                    }
+                  )
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="form-group">
+
+                <label for="namefield">No. documento</label>
+                <span v-show="isValidField('document_number')" class='required-field'>*</span>
+                <%= f.text_field :document_number,
+                  class: 'form-control input-sm',
+                  "v-validate"=>"'required'"
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-5 col-md-5 col-lg-5">
+              <div class="form-group" >
+                <label for="namefield">Nombre</label>
+                <span v-show="isValidField('name')" class='required-field'>*</span>
+                <%= f.text_field :name,
+                  class: 'form-control input-sm',
+                  "v-validate"=>"'required'"
+                %>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12" v-show = 'contractor_type_id != 2'  >
+              <br>
+              <h5>Información del representante legal</h5>
+              <hr>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3" v-show = 'contractor_type_id != 2'>
+              <div class="form-group">
+                <label for="namefield">Tipo de documento</label>
+                <span v-show="isValidField('legal_representant_document_type')" class='required-field'>*</span>
+                <%=
+                  f.collection_select(
+                    :legal_representant_document_type,
+                    IDENTIFICATION_TYPES,
+                    :last,
+                    :first,
+                    { include_blank: true },
+                    {
+                      class: 'form-control input-sm',
+                              "v-model" => "legal_representant_document_type"
+                    }
+                  )
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 col-lg-3" v-show = 'contractor_type_id != 2'>
+              <div class="form-group">
+                <label for="namefield">No. documento</label>
+                <span v-show="isValidField('legal_representant_document_number')" class='required-field'>*</span>
+                <%= f.text_field :legal_representant_document_number,
+                  class: 'form-control input-sm',
+                          "v-model" => "legal_representant_document_number"
+                %>
+              </div>
+            </div>
+
+            <div class="col-sm-5 col-md-5 col-lg-5" v-show = 'contractor_type_id != 2'>
+              <div class="form-group">
+                <label for="namefield">Nombre</label>
+                <%= f.text_field :legal_representant_name,
+                  class: 'form-control input-sm',
+                        "v-model" => "legal_representant_name"
+                %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-11 col-md-11 col-lg-11">
+          <br>
+          <div v-show="errors.any()" class="alert alert-warning" role="alert">
+            <p>
+              <%= fw_icon('warning') %>
+              Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <hr>
+          <% unless @current_query.blank? %>
+            <%= hidden_field_tag(:query, @current_query) %>
+          <%end%>
+           <%= hidden_field_tag(:page, @current_page) %>
+          <%= f.submit 'Registrar', class: 'btn btn-primary', ':disabled'=>"(errors.count() >= 1) || fields.clean()", "data-disable-with" => "Registrando..." %>
+          <%= link_to 'Cancelar', contractors_path(query: @current_query, page: @current_page), class: 'btn btn-default' %>
+
+          <% unless contractor.new_record? %>
+            <%= link_to('#', class: 'danger-link pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+              <i class="fa fa-trash-o fa-lg fa-fw" aria-hidden="true"></i>
+            <% end -%>
+
+            <!-- BEGIN DESTROY PERSON MODAL -->
+            <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Eliminar contratista</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <% if policy(contractor).destroy? %>
+                        Esta seguro de eliminar el registro con el nombre <b><%= contractor.name %></b>? <br> Tenga en cuenta que esta acción es permanente.
+                      <% else %>
+                        No tiene los permisos necesarios para eliminar un contrato. contacte al administrador del sistema.
+                      <% end %>
+                    </p>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                    <% if policy(contractor).destroy? %>
+                      <%= link_to "Eliminar", [contractor, page: @current_page, query: @current_query], method: :delete, class: 'btn btn-danger' %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END DESTROY PERSON MODAL -->
+          <% end -%>
+        </div>
+      </div>
+    <% end -%>
+  </div>
+</div>

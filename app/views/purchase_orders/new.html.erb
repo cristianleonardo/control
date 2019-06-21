@@ -1,0 +1,19 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Orden de compra',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Orden de compra'
+    }
+  }) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Nueva Orden de compra</h5>
+      <br>
+
+      <%= render 'form', purchase_order: @purchase_order %>
+    </div>
+  </div>
+<% end -%>

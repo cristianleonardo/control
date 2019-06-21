@@ -1,0 +1,149 @@
+ <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <%= form_for([@work, @inventory, purchase_order], html: { id: 'purchase_order_form', 'v-cloak' => true,  novalidate: true}) do |f| %>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Numero de orden</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.text_field :order_number,
+                    class: 'form-control input-sm',
+                    required: true
+                  %>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Numero de factura</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.text_field :invoice_number,
+                    class: 'form-control input-sm',
+                    required: true
+                  %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Valor base</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.number_field :base_value,
+                    class: 'form-control input-sm',
+                    required: true
+                  %>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Valor descontado de IVA</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.number_field :vat_value,
+                    class: 'form-control input-sm',
+                    required: true
+                  %>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Porcentaje de IVA</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.text_field :vat_percentage,
+                    class: 'form-control input-sm',
+                    required: true
+                  %>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="namefield">Proveedor</label>
+                  <span v-show="isValidField('abbreviation')" class='required-field'>*</span>
+                  <%= f.collection_select(
+                    :user_id,
+                    Provider.all,
+                    :id,
+                    :name,
+                    { include_blank: true },
+                    {
+                      class: 'form-control input-sm',
+                      "v-validate"=>"'required'",
+                      "@change" => "fetchInputs",
+                      "v-model" => "provider"
+                    }
+                  )
+                %>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="form-group">
+                  <label for="inputs">Insumos</label>
+                  <span v-show="isValidField('input_ids')" class='required-field'>*</span>
+                  <select multiple id="input_list" class="form-control select2 input-sm" v-model="selected_input" data-fieldname= "selected_input">
+                    <option label=" "></option>
+                    <option v-for="input in inputs" :value="input.id"> {{input.name}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            <div>
+              <%= f.hidden_field :input_ids, {"v-model" => "selected_input"} %>
+            </div>
+
+             <div>
+              <%= f.hidden_field :id, value: @inventory.id %>
+            </div>
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+          <div v-show="errors.any()" class="alert alert-warning" role="alert">
+            <p>
+              <i class="fa fa-warning"></i>
+              Por favor vefifique los datos en los campos con el <b>*</b> antes de continuar.
+            </p>
+          </div>
+        </div>
+      </div>
+
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <hr>
+            <%= f.submit 'Registrar', class: 'btn btn-primary', ":disabled" => "(errors.count() >= 1) || fields.clean()", "data-disable-with"=> "Registrando..." %>
+            <%= link_to 'Cancelar', work_invenroy_inputs_path(id: @inventory.id), class: 'btn btn-default' %>
+
+            <% unless purchase_order.new_record? %>
+              <%= link_to('#', class: 'danger-link pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+                <i class="fa fa-trash-o fa-lg fa-fw" aria-hidden="true"></i>
+              <% end -%>
+
+              <!-- BEGIN DESTROY PERSON MODAL -->
+              <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                      <h4 class="modal-title">Eliminar Inventario</h4>
+                    </div>
+                    <div class="modal-body">
+                      <p>
+                        Esta seguro de eliminar el registro con el nombre <b><%= inventory.code %></b>? <br> Tenga en cuenta que esta acción es permanente.
+                      </p>
+                    </div>
+
+                    <div class="modal-footer">
+                      <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END destroyModalpermanenteSON MODAL -->
+            <% end -%>
+          </div>
+        </div>
+      <% end -%>
+    </div>
+  </div>

@@ -1,0 +1,161 @@
+<div class="row">
+  <div class="col-lg-12">
+    <%= form_for(user, html: { id: 'user_form',  novalidate: false, 'v-cloak' => true }) do |f| %>
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+             <label for="namefield">Nombres</label>
+             <span v-show="isValidField('firstname')" class='required-field'>*</span>
+             <%= f.text_field :firstname,
+               class: 'form-control input-sm',
+               "v-validate"=>"'required'",
+               disabled: user.disabled
+             %>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="namefield">Apellidos</label>
+            <span v-show="isValidField('lastname')" class='required-field'>*</span>
+            <%= f.text_field :lastname,
+              class: 'form-control input-sm',
+              "v-validate"=>"'required'",
+              disabled: user.disabled
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="namefield">Correo electr&oacute;nico</label>
+            <span v-show="isValidField('email')" class='required-field'>*</span>
+            <%= f.text_field :email,
+              class: "form-control input-sm",
+              "v-validate"=>"'required'",
+              disabled: user.disabled
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="namefield">Grupo</label>
+            <span v-show="isValidField('role_group')" class='required-field'>*</span>
+            <%=
+              f.collection_select(
+                :role_group,
+                ROLE_GROUPS,
+                :last,
+                :first,
+                { include_blank: true },
+                {
+                  class: "form-control input-sm",
+                  "v-validate"=>"'required'",
+                  disabled: user.disabled
+                }
+              )
+            %>
+          </div>
+        </div>
+      </div>
+
+      <% unless user.new_record? %>
+        <br>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="well well-sm">
+              <% send_button_label = user.invitation_sent_at.present? ? 'Re-enviar la invitación' : 'Enviar la invitación' %>
+              <%= link_to('#', class: "btn btn-info btn-xs #{'disabled' if user.disabled}", "data-target" => "#sentInvitationModal", "data-toggle" => "modal") do %>
+                <%= fw_icon('paper-plane', send_button_label, 'xs') %>
+              <% end %>&nbsp;&nbsp;&nbsp;
+
+              <% if user.invitation_sent_at.present? %>
+                <small style="color: #909292;">Ultima invitaci&oacute;n <%= user.invitation_sent_at.strftime("enviada en la fecha: %m/%d/%Y a las %I:%M%p") %></small>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <!-- BEGIN sentInvitationModal -->
+        <div id="sentInvitationModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                <h4 class="modal-title">Re-enviar invitaci&oacute;n</h4>
+              </div>
+              <div class="modal-body">
+                <p>
+                  Esta seguro de re-enviar la invitacion al usuario con el nombre <b><%= user.firstname %> <%= user.lastname %></b>?
+                </p>
+              </div>
+
+              <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                <%= link_to "Enviar", send_invitation_user_path(user), method: :post, id: 'send_invitation_button', class: "btn btn-info #{'disabled' if user.disabled}" %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END sentInvitationModal -->
+      <% end %>
+
+      <!-- BEGIN INCOMPLETE WARNING -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div v-show="errors.any()" class="alert alert-warning" role="alert">
+            <p>
+              <%= fw_icon('warning') %>
+              Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- END INCOMPLETE WARNING -->
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <hr>
+          <%= f.submit 'Registrar', class: 'btn btn-primary', ':disabled'=>"(errors.count() >= 1) || fields.clean()", "data-disable-with" => "Registrando..." %>
+          <%= link_to 'Cancelar', users_path, class: 'btn btn-default' %>
+
+          <% unless user.new_record? %>
+            <%= link_to('#', class: 'btn btn-default pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+              <%= user.disabled ? 'Habilitar' : 'Deshabilitar' %>
+            <% end -%>
+
+            <!-- BEGIN DESTROY PERSON MODAL -->
+            <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Deshabilitar usuario</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      Esta seguro de desactivar el usuario con el nombre <b><%= user.firstname %> <%= user.lastname %></b>?
+                    </p>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                    <% if user.disabled %>
+                      <%= link_to "Habilitar", enable_user_path(user), method: :post, class: 'btn btn-default' %>
+                    <% else %>
+                    <%= link_to "Deshabilitar", disable_user_path(user), method: :post, class: 'btn btn-default' %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END DESTROY PERSON MODAL -->
+          <% end -%>
+        </div>
+      </div>
+    <% end -%>
+  </div>
+</div>

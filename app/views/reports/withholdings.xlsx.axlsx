@@ -1,0 +1,42 @@
+# coding: utf-8
+wb = xlsx_package.workbook
+wb.styles do |style|
+  wb.add_worksheet(name: "Retenciones") do |sheet|
+    title = wb.styles.add_style(bg_color:  "aab0b7",
+                                fg_color: "#FF000000",
+                                b: true,
+                                border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {horizontal: :center})
+    first_values = wb.styles.add_style(border: Axlsx::STYLE_THIN_BORDER,
+                                alignment: {horizontal: :center})
+
+    row = wb.styles.add_style(format_code: "$#,##0;[Red]$-#,##0",
+      border: Axlsx::STYLE_THIN_BORDER)
+    sum = wb.styles.add_style(format_code: "$#,##0;[Red]$-#,##0",
+                              border: Axlsx::STYLE_THIN_BORDER, bg_color:  "efe63b"
+                              )
+
+    sheet.add_row  withholdings_names_to_columns(withholdings_names), style: title
+    months.each do |month|
+      sum_start = 0
+      sum_stop = 0
+      month.each do |payment|
+        content_row = sheet.add_row payment_row_values(payment, @withholdings_names), style: row
+        if payment == month.first
+          sum_start = content_row.index + 1
+          if payment == month.last
+            sum_stop = sum_start
+          end
+        elsif payment == month.last
+          sum_stop = content_row.index + 1
+        end
+      end
+      sum_row = sheet.add_row sum_payment_monthly(month, withholdings_names, sum_start, sum_stop), style: sum
+    end
+    sheet.col_style(0,first_values)
+    sheet.col_style(1,first_values)
+    sheet.rows[0].cells[0].style = title
+    sheet.rows[0].cells[1].style = title
+  end
+end
+

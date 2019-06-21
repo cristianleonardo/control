@@ -1,0 +1,93 @@
+@import 'bootstrap-customs';
+@import '~bootstrap-sass/assets/stylesheets/_bootstrap';
+@import '~select2/dist/css/select2';
+@import '~select2-bootstrap-css/select2-bootstrap';
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,900,500,300,100);
+@import '~bootstrap-datepicker/dist/css/bootstrap-datepicker';
+@import "~dropzone/dist/dropzone";
+@import "~dropzone/dist/basic.css";
+
+body {
+  padding-top: 70px;
+  font-family: 'Roboto', sans-serif;
+  margin-bottom: 80px;
+}
+
+#tools-section { margin-bottom: 20px; }
+
+.center-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin: 0 auto;
+  margin-bottom: 50px;
+}
+
+[v-cloak] { display: none }
+
+.danger-link {
+  color: #e94a34;
+  &:hover{
+    text-decoration:none;
+    color: #e94a34;
+  }
+}
+
+.required-field {
+  color: #e94a34;
+  font-size: 13px;
+}
+
+.submit_plus_button { margin-top: 24px; }
+
+#prueba{
+  div.input-group{
+    position: relative;
+    display: flex;
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    width: 100%;
+  }
+  span.input-group-text{
+    display: -webkit-box;
+    align-items: center;
+    -webkit-box-align: center;
+    padding: .375rem .75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+  }
+}
+
+#table_strategic_planning{
+  table.table{
+    width: 100%;
+    white-space: nowrap;
+  }
+}
+
+footer.navbar-default.navbar-fixed-bottom {
+  background-color: #f5f5f5;
+  padding:1em 0;
+}
+
+footer.navbar-default.navbar-fixed-bottom p { margin:0; }
+
+// MEDIA CONTENT DROPZONE
+#media-dropzone {
+  padding: 50px;
+  background-image: url('https://s3-us-west-2.amazonaws.com/sapsb-prod/public/upload-media-background.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100px 75px;
+}
+.select2-container .select2-selection--single{
+  height: 32px;
+}

@@ -1,0 +1,187 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <%= form_for(payment, html: { id: 'payment_form', 'v-cloak' => true,  novalidate: false, data: payment_form_props}) do |f| %>
+
+      <div class="row">
+        <div class="col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="namefield">No. del proceso</label>
+            <span v-show="isValidField('contract')" class='required-field'>*</span>
+            <%=
+              f.collection_select(
+                :contract_id,
+                Contract.all,
+                :id,
+                :process_number,
+                {include_blank: true},
+                {
+                  class: 'form-control select2 input-sm',
+                  disabled: !@payment.new_record?,
+                  "v-validate"=>"'required'"
+                }
+              )
+            %>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="namefield">Fecha de cobro</label>
+            <span v-show="isValidField('date')" class='required-field'>*</span>
+            <%= f.text_field :date,
+              class: 'form-control datepicker input-sm',
+              "v-validate"=>"'required'",
+              value: @payment.date != nil ? f.object.date.strftime("%Y/%m/%d") : ''
+            %>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+          <div class="form-group">
+            <label for="namefield">Orden de pago</label>
+            <span v-show="isValidField('code')" class='required-field'>*</span>
+            <%= f.text_field :code,
+              class: 'form-control input-sm',
+              "v-validate"=>"'required'"
+            %>
+          </div>
+        </div>
+      </div>
+
+    <div class="row">
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label for="namefield">Tipo de cobro</label>
+          <span v-show="isValidField('payment_type')" class='required-field'>*</span>
+          <%=
+            f.collection_select(
+              :payment_type,
+              PAYMENT_TYPE,
+              :last,
+              :first,
+              {include_blank: true},
+              {
+                class: 'form-control input-sm',
+                "v-validate"=>"'required'"
+              }
+            )
+          %>
+        </div>
+      </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="form-group">
+          <label for="payment_value">Valor</label>
+          <span v-show="isValidField('value')" class='required-field'>*</span>
+          <span v-show="!isValidNumberField('value')" class='required-field'>*Número inválido</span>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon2">$</span>
+            <%= f.number_field :value, step: :any,
+              class: 'form-control input-sm',
+              "v-validate"=>"'required|decimal:2|min_value:0'"
+            %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="field form-group">
+          <div class="checkbox-inline">
+            <%= f.check_box :prepayment,
+              "v-model" => "prepayment"
+            %>
+            <%= f.label :prepayment, "¿Es anticipo?" %>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="field form-group">
+          <div class="checkbox-inline">
+            <%= f.check_box :vat,
+              "v-model" => "vat",
+              ':disabled'=> "prepayment"
+            %>
+            <%= f.label :vat, "¿Aplica IVA?" %>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3 col-md-3 col-lg-3 " v-show="vat">
+        <div class="form-group">
+        <label for="namefield">Porcentaje IVA</label>
+          <span v-show="isValidField('vat_percentage')" class='required-field'>*</span>
+          <span v-show="!isValidNumberField('vat_percentage')" class='required-field'>*Número inválido</span>
+          <%= f.number_field :vat_percentage, step: :any,
+            class: 'form-control input-sm',
+            "v-validate"=>"'decimal:1|min_value:0'",
+            "v-model" => "vat_percentage"
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="form-group">
+          <label for="namefield">Observaciones</label>
+          <%= f.text_area :observations,
+          class: 'form-control input-sm'
+          %>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <div v-show="errors.any()" class="alert alert-warning" role="alert">
+          <p>
+            <i class="fa fa-warning"></i>
+            Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <hr>
+        <% unless @current_query.blank? %>
+          <%= hidden_field_tag(:query, @current_query) %>
+        <%end%>
+        <%= hidden_field_tag(:page, @current_page) %>
+        <%= f.submit 'Registrar', class: 'btn btn-primary', ':disabled'=>"(errors.count() >= 1) || fields.clean()", "data-disable-with" => "Registrando..." %>
+        <%= link_to 'Cancelar', payments_path(query: @current_query, page: @current_page), class: 'btn btn-default' %>
+
+        <% unless @payment.new_record? %>
+          <%= link_to('#', class: 'danger-link pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+            <i class="fa fa-trash-o fa-lg fa-fw" aria-hidden="true"></i>
+          <% end -%>
+
+          <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                  <h4 class="modal-title">Eliminar pago</h4>
+                </div>
+                <div class="modal-body">
+                  <% if policy(@payment).destroy? %>
+                    <p>
+                    Esta seguro de eliminar el pago con el nombre <b><%= payment.code %></b>? <br> Tenga en cuenta que esta acción es permanente.
+                    </p>
+                  <% else %>
+                    No tiene los permisos necesarios para eliminar un contrato. contacte al administrador del sistema.
+                  <% end %>
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                  <% if policy(@payment).destroy? %>
+                    <%= link_to "Eliminar", [payment, query: @current_query, page: @current_page], method: :delete, class: 'btn btn-danger' %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end -%>
+      <% end -%>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,21 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    breadcrumbs: {
+      browser_title: 'Fuentes/Resumen',
+      crumbs: [ { name: 'Fuentes', path: sources_path } ],
+      active_label: "Resumen de la fuente: \"#{@source.name}\""
+    },
+    has_return: true,
+    return_path: sources_path(query: @current_query, page: @current_page)
+  }
+) do %>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Resumen de la fuente: "<%= @source.name %>"</h5>
+      <br>
+
+      <div class="alert alert-info" role="alert">Vista en desarrollo...</div>
+    </div>
+  </div>
+<% end -%>

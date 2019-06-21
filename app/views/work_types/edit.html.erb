@@ -1,0 +1,23 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: "Tipos de contrato/editar: #{@work_type.name}",
+    section: 'administration',
+    breadcrumbs: {
+      crumbs: [ { name: 'Tipos de contrato', path: work_types_path } ],
+      active_label: "Editar: #{@work_type.name}"
+    },
+    has_return: true,
+    return_path: work_types_path
+  }
+) do %>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <h5>Editar tipo de obra</h5>
+      <br>
+
+      <%= render 'form', work_type: @work_type %>
+    </div>
+  </div>
+<% end -%>

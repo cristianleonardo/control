@@ -1,0 +1,90 @@
+<%= render(
+  layout: 'shared/a/base',
+  :locals => {
+    browser_title: 'Contratistas',
+    breadcrumbs: {
+      crumbs: [],
+      active_label: 'Contratistas'
+    }
+  }
+) do %>
+  <div class="row">
+    <% if policy(Contractor).new? %>
+      <div class="col-xs-4 col-lg-6">
+        <%= link_to(
+          new_contractor_path(query: params[:query], page: params[:page]),
+          class: 'btn btn-primary'
+        ) do %>
+          <%= fw_icon('plus') %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class='col-lg-6'>
+      <%= form_tag contractors_path, :method => 'get', class: 'form-inline pull-right' do %>
+        <div class="input-group">
+          <%= text_field_tag :query, params[:query], class: 'form-control', placeholder: "Nombre, documento..." %>
+          <span class="input-group-btn">
+            <%= submit_tag "Buscar", :name => nil, class: 'btn btn-default' %>
+            <% if params[:query] %>
+              <%= link_to 'Limpiar', contractors_path, class: "btn btn-info" %>
+            <% end %>
+          </span>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @contractors.empty? %>
+    <br>
+    <div class="alert alert-info">
+      <strong>&iexcl;Atenci&oacute;n!</strong>
+      <% if params[:query] %>
+        No se encontraron contratistas relacionados con el criterio. Intente de nuevo.
+      <% else %>
+        Aun no se registran contratistas, has clic en el bot&oacute;n <%= fw_icon('plus') %> para agregar el primero.
+      <% end %>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-lg-12">
+        <br>
+        <h5>Listado de contratistas registrados</h5>
+        <hr>
+        <div class="table-responsive">
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th width='15%'></th>
+                <th width='25%'>Nombre</th>
+                <th width='20%'>Tipo de documento</th>
+                <th width='20%'>No. Documento</th>
+                <th width='20%'>Representante Legal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @contractors.each do |contractor| %>
+                <tr>
+                  <td>
+                    <% if policy(contractor).show? %>
+                      <%= link_to 'Resumen', contractor_path(contractor, query: params[:query], page: params[:page], page: params[:page]), class: 'btn btn-default btn-xs' %>
+                    <% else %>
+                      <%= link_to(edit_contractor_path(contractor, query: params[:query], page: params[:page], page: params[:page]), class: 'btn btn-default btn-xs') do %>
+                        <%= fw_icon('pencil', 'Editar', 'xs') %>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td><%= contractor.name %></td>
+                  <td><%= contractor.document_type %></td>
+                  <td><%= contractor.document_number %></td>
+                  <td><%= contractor.legal_representant_name %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+        <%= paginate @contractors, :window => 4 %>
+      </div>
+    </div>
+  <% end -%>
+<% end -%>

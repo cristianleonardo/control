@@ -1,0 +1,53 @@
+machine:
+  ruby:
+    version: 2.5.0
+
+dependencies:
+  pre:
+    - rvm install rubygems 2.6.10 --force
+    - gem install bundler -v 1.14.5
+    - bundle install
+  post:
+    - chmod +x bin/cisetup
+    - bin/cisetup
+
+checkout:
+  post:
+    - git fetch origin --depth=1000000
+
+deployment:
+  staging:
+    branch: staging
+    commands:
+      - |
+        cat >~/.netrc <<EOF
+        machine api.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_TOKEN
+        machine git.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_TOKEN
+        EOF
+      - chmod 600 ~/.netrc
+      - heroku maintenance:on --app sapsb-staging
+      - git push git@heroku.com:sapsb-staging.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app sapsb-staging
+      - heroku maintenance:off --app sapsb-staging
+
+  production:
+    branch: master
+    commands:
+      - |
+        cat >~/.netrc <<EOF
+        machine api.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_TOKEN
+        machine git.heroku.com
+          login $HEROKU_EMAIL
+          password $HEROKU_TOKEN
+        EOF
+      - chmod 600 ~/.netrc
+      - heroku maintenance:on --app sapsb
+      - git push git@heroku.com:sapsb.git $CIRCLE_SHA1:refs/heads/master
+      - heroku run rake db:migrate --app sapsb
+      - heroku maintenance:off --app sapsb

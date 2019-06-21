@@ -1,0 +1,29 @@
+<%= content_for :title, "Iniciar sesión" %>
+
+<div class="container">
+  <div class='row'>
+    <div class='col-xs-12 col-sm-offset-3 col-sm-6 col-md-offset-4 col-md-4 col-lg-offset-4 col-lg-4'>
+      <%= image_tag('/assets/images/logo.svg', size: '250x120', class: "center-image") %>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class='form-group'>
+          <%= label :user, :email, 'Correo electrónico' %>
+          <%= f.email_field :email, autofocus: true, class: 'form-control' %>
+        </div>
+        <div class='form-group'>
+          <%= label :user, :password, 'Contraseña' %>
+          <%= f.password_field :password, autocomplete: "off", class: 'form-control' %>
+        </div>
+        <% if devise_mapping.rememberable? %>
+          <br>
+          <%= f.check_box :remember_me %>
+          <%= label :user, :remember_me, 'Recordarme' %>
+        <% end %>
+        <%= render "users/shared/links" %>
+        <br>
+        <%= submit_tag "Iniciar sesión", class: 'btn btn-primary' %>
+      <% end %>
+      <br>
+      <br>
+    </div>
+  </div>
+</div>

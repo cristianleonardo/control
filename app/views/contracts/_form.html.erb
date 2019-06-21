@@ -1,0 +1,351 @@
+<div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <%= form_for(
+      @contract,
+      html: {
+        id: 'contract_form',
+        'v-cloak' => true,
+        novalidate: false,
+        'data-contractor'  => contract.contractor_id,
+        'data-supervisor'  => contract.supervisor_contractor_id,
+        'data-interventor' => contract.interventor_contractor_id,
+        'data-start-date'  => contract.start_date,
+        "data-action"      => params[:action],
+        "data-contract_id" => @contract.id
+      },
+    ) do |f| %>
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_contract_number">Número de contracto</label>
+            <%= f.text_field :contract_number,
+              class: 'form-control input-sm'
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_process_number">Número de proceso</label>
+            <%= f.text_field :process_number,
+              class: 'form-control input-sm'
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_contract_type_id">Tipo de Contrato</label>
+            <%=
+              f.collection_select(
+                :contract_type_id,
+                ContractType.all,
+                :id,
+                :name,
+                {include_blank: true},
+                {
+                  class: 'form-control select2 input-sm'
+                }
+              )
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_state">Estado del contrato</label>
+            <%=
+              f.collection_select(
+                :state,
+                CONTRACT_STATES,
+                :last,
+                :first,
+                {include_blank: true},
+                {
+                  class: 'form-control select2 input-sm'
+                }
+              )
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_contractor_id">Contratista</label>
+            <%=
+              f.collection_select(
+                :contractor_id,
+                Contractor.all,
+                :id,
+                :name,
+                { include_blank: true },
+                {
+                  'data-fieldname' => 'contractor_id',
+                  class: 'form-control select2 input-sm select2',
+                  "v-model" => "contractor_id"
+                }
+              )
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_interventor_contractor_id">Interventor</label>
+            <span v-show="isValidField('interventor_contractor_id')" class='required-field'>*</span>
+            <%=
+              f.collection_select(
+                :interventor_contractor_id,
+                Contractor.all,
+                :id,
+                :name,
+                {include_blank: true},
+                {
+                  'data-fieldname' => 'interventor_id',
+                  class: 'form-control select2 input-sm',
+                  "v-model" => "interventor_id"
+                }
+              )
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-3">
+          <div class="form-group">
+            <label for="contract_supervisor_contractor_id">Supervisor</label>
+            <span v-show="isValidField('supervisor_contractor_id')" class='required-field'>*</span>
+            <%=
+              f.collection_select(
+                :supervisor_contractor_id,
+                Contractor.all,
+                :id,
+                :name,
+                {include_blank: true},
+                {
+                  'data-fieldname' => 'supervisor_id',
+                  class: 'form-control select2 input-sm',
+                  "v-model" => "supervisor_id"
+                }
+              )
+            %>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" v-show="hasValidContractors">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="alert alert-warning" role="alert">
+            <p>
+              <i class="fa fa-warning"></i>
+              El contratista, supervisor o interventor no pueden ser el mismo.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label for="contract_start_date">Fecha de inicio</label>
+            <%= f.text_field :start_date,
+              class: 'form-control datepicker input-sm',
+              "v-model" => "start_date",
+              value: @contract.start_date != nil ? f.object.start_date.strftime("%Y-%m-%d") : '',
+              'data-fieldname' => 'start_date'
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label for="contract_end_date">Fecha de terminación</label>
+            <%= f.text_field :end_date,
+              class: 'form-control datepicker input-sm',
+              value: @contract.end_date != nil ? f.object.end_date.strftime("%Y/%m/%d") : ''
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label for="contract_initial_value">Valor Inicial</label>
+            <span v-show="!isValidNumberField('initial_value')" class='required-field'>*Número inválido</span>
+            <div class="input-group">
+              <span class="input-group-addon">$</span>
+              <%= f.number_field :value, step: :any,
+                class: 'form-control input-sm',
+                "v-validate"=>"'decimal:4|min_value:0'"
+              %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="contract_description">Observaciones</label>
+            <%= f.text_area :description,
+              class: 'form-control input-sm',
+              rows: 5
+            %>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="form-group">
+            <label for="contract_contractual_object">Objeto contractual</label>
+            <%= f.text_area :contractual_object,
+              class: 'form-control input-sm',
+              rows: 5
+            %>
+          </div>
+        </div>
+      </div>
+
+    <% unless @contract.new_record? %>
+      <div id="contract_media">
+        <hr>
+        <%= link_to('#', class: 'btn btn-default pull-right', 'data-toggle':"modal", 'data-target':"#uploadmediaToContract", "data-no-turbolink" => true) do %>
+          <i class="fa fa-upload fa-lg fa-fw"></i>
+          Cargar documentos
+        <% end %>
+
+        <h4>Documentos</h4>
+        <br>
+
+        <div class="table-responsive" v-if="medias.length > 0">
+          <table class='table table-condensed'>
+            <thead>
+              <tr>
+                <th width="20%"></th>
+                <th width="30%">Fecha/Hora</th>
+                <th width="50%">Nombre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="media in medias" track-by="$index">
+                <td>
+                  <a v-bind:href="media.file.url" class='btn btn-default btn-xs' target='_blank'>Ver</a>
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-xs"
+                    @click="showDestroyWarning(media)"
+                  >
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </td>
+                <td>{{ media.created_at | momentjs }}</td>
+                <td>{{ media.name | truncate(60) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div v-if="medias.length === 0">
+          Este contrato no contiene documentos aun, para agregar uno haga clic en el bot&oacute;n &quot;Cargar&quot;.
+        </div>
+
+        <div id='uploadmediaToContract' class="modal fade" tabindex="-1" role="dialog" aria-labelledby="uploadmediaToContractLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="uploadmediaToContractLabel">Cargar documentos</h4>
+              </div>
+                <div class="modal-body" id="media-dropzone">
+                  <div class= "media-dropzone" >
+                    Documentos cargados: <b>{{ uploadedFiles }}</b>
+                  </div>
+                </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      </div>
+
+      <!-- BEGIN DESTROYWARNING MODAL -->
+      <div class="modal fade" id="destroyMediaModal" tabindex="-1" role="dialog" aria-labelledby="destroyMediaLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Eliminar variante</h4>
+            </div>
+            <div class="modal-body">
+              Esta seguro de eliminar el documento con el nombre: <b>{{ mediaToDestroy.name }}</b>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-danger" @click="destroyMedia(mediaToDestroy)">Eliminar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END DESTROYWARNING MODAL -->
+    <% end %>
+      <!-- BEGIN INCOMPLETE WARNING -->
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div v-show="errors.any()" class="alert alert-warning" role="alert">
+            <p>
+              <i class="fa fa-warning"></i>
+              Por favor verifique los datos en los campos con el <b>*</b> antes de continuar.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- END INCOMPLETE WARNING -->
+
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <hr>
+          <% unless @current_query.blank? %>
+            <%= hidden_field_tag(:query, @current_query) %>
+          <%end%>
+          <%= f.submit 'Registrar', class: 'btn btn-primary', ':disabled'=>"(errors.count() >= 1) || fields.clean()", "data-disable-with" => "Registrando..." %>
+          <%= link_to 'Cancelar', contracts_path(query: @current_query), class: 'btn btn-default' %>
+
+          <% unless @contract.new_record? %>
+            <%= link_to('#', class: 'danger-link pull-right', "data-target" => "#destroyModal", "data-toggle" => "modal") do %>
+              <i class="fa fa-trash-o fa-lg fa-fw" aria-hidden="true"></i>
+            <% end -%>
+
+            <!-- BEGIN DESTROY MODAL -->
+            <div id="destroyModal" class="modal fade" aria-hidden="true" role="dialog" tabindex="-1">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">&times;</button>
+                    <h4 class="modal-title">Eliminar contrato</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                      <% if policy(@contract).destroy? %>
+                        Esta seguro de eliminar el Contrato con el número <b><%= contract.contract_number %></b>? <br> Tenga en cuenta que esta acción es permanente.
+                      <% else %>
+                        No tiene los permisos necesarios para eliminar un contrato. contacte al administrador del sistema.
+                      <% end %>
+                    </p>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" type="button">Cerrar</button>
+                    <% if policy(@contract).destroy? %>
+                      <%= link_to "Eliminar", [@contract, query: @current_query], method: :delete, class: 'btn btn-danger' %>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END DESTROY PERSON MODAL -->
+          <% end -%>
+        </div>
+      </div>
+    <% end -%>
+  </div>
+</div>
